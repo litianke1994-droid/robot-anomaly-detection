@@ -1,8 +1,8 @@
 # API image. Serves a bundle that was trained beforehand by the pipeline;
 # the container never retrains and never needs the raw dataset.
 #
-#   docker build -t robot-ad-api:1.0.0 .
-#   docker run --rm -p 8000:8000 robot-ad-api:1.0.0
+#   docker build -t robot-ad-api:1.1.0 .
+#   docker run --rm -p 8000:8000 robot-ad-api:1.1.0
 #
 # NOTE: not yet built on the development machine (Docker is not installed
 # there); see README "Docker" and reports/docker_status.md.
@@ -11,7 +11,7 @@ FROM python:3.12.10-slim
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PYTHONPATH=/app/src:/app \
-    ROBOT_AD_BUNDLE=/app/models/iforest__full_18.joblib
+    ROBOT_AD_BUNDLE=/app/models/v1_1__selected.joblib
 
 WORKDIR /app
 
@@ -21,8 +21,8 @@ RUN pip install --no-cache-dir -r requirements-api.txt
 COPY src/ src/
 COPY api/ api/
 COPY configs/ configs/
-# Bundle must exist locally: run scripts/01-04 first.
-COPY models/iforest__full_18.joblib models/iforest__full_18.json models/
+# Bundle must exist locally: run scripts/01-04 and 09-11 first. v1.1 needs no PyTorch.
+COPY models/v1_1__selected.joblib models/v1_1__selected.json models/
 
 RUN useradd --create-home appuser
 USER appuser

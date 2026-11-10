@@ -3,7 +3,7 @@
     uvicorn api.main:app --port 8000
 
 Environment:
-    ROBOT_AD_BUNDLE  path to the model bundle (default models/iforest__full_18.joblib)
+    ROBOT_AD_BUNDLE  path to the model bundle (default models/v1_1__selected.joblib; v1: models/iforest__full_18.joblib)
 """
 
 from __future__ import annotations
@@ -25,7 +25,7 @@ from robot_ad.schema import InputError
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
 log = logging.getLogger("robot_ad.api")
 
-BUNDLE_PATH = os.environ.get("ROBOT_AD_BUNDLE", str(MODELS_DIR / "iforest__full_18.joblib"))
+BUNDLE_PATH = os.environ.get("ROBOT_AD_BUNDLE", str(MODELS_DIR / "v1_1__selected.joblib"))
 
 _state: dict[str, Any] = {"predictor": None, "load_error": None}
 
@@ -52,8 +52,10 @@ async def _invalid_body(_: Request, exc: RequestValidationError) -> JSONResponse
 def get_predictor() -> Predictor | None:
     if _state["predictor"] is None and _state["load_error"] is None:
         try:
-            _state["predictor"] = Predictor.from_path(BUNDLE_PATH)
-            log.info("bundle loaded model_version=%s", _state["predictor"].model_version)
+            pred = Predictor.from_path(BUNDLE_PATH)
+            warm_ms = pred.warmup()
+            _state["predictor"] = pred
+            log.info("bundle loaded model_version=%s warmup_ms=%.1f", pred.model_version, warm_ms)
         except Exception as e:  # reported by /health
             _state["load_error"] = f"{type(e).__name__}: {e}"
             log.error("bundle load failed: %s", _state["load_error"])

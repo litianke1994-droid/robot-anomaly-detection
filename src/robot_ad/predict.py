@@ -59,6 +59,19 @@ class Predictor:
             return float(self.scorer.score(np.atleast_2d(x), seq)[0])
         return float(self.score_features(x)[0])
 
+    def warmup(self) -> float:
+        """Score one synthetic normal-looking cycle so the first real request does not pay
+        one-off initialization costs (thread pools, lazy imports: ~1.4 s measured for LOF)."""
+        t0 = time.perf_counter()
+        x = np.asarray(self.bundle["deviation"].mean_, dtype=np.float64)[None]
+        if self.scorer is not None and self.scorer.needs_sequence:
+            from .sequence import SEQ_LEN
+
+            self.scorer.score(x, np.zeros((1, len(self.channels), SEQ_LEN), dtype=np.float32))
+        else:
+            self.score_features(x)
+        return (time.perf_counter() - t0) * 1e3
+
     def deviation_hints(self, x: np.ndarray) -> list[dict]:
         """Per-channel max |z| against fit_normal statistics. Auxiliary hint, not a causal explanation."""
         z = self.bundle["deviation"].zscores(np.atleast_2d(x))[0]

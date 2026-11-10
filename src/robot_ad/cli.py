@@ -18,7 +18,7 @@ from .config import MODELS_DIR
 from .predict import Predictor
 from .schema import InputError
 
-DEFAULT_BUNDLE = os.environ.get("ROBOT_AD_BUNDLE", str(MODELS_DIR / "iforest__full_18.joblib"))
+DEFAULT_BUNDLE = os.environ.get("ROBOT_AD_BUNDLE", str(MODELS_DIR / "v1_1__selected.joblib"))
 
 
 def main(argv: list[str] | None = None) -> int:

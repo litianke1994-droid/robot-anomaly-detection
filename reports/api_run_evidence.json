@@ -1,17 +1,21 @@
 {
   "ports": [
-    64923,
-    64924
+    61359,
+    61360
   ],
-  "startup_seconds": 1.69,
+  "startup_seconds": 2.76,
   "health": {
     "status": 200,
     "body": {
       "status": "ok",
       "model_ready": true,
-      "model_version": "robot-ad-1.0.0-iforest-full_18",
+      "model_version": "robot-ad-1.1.0-mahalanobis+lof-n_neighbors10-multi",
       "schema_version": "robot-cycle-v1",
-      "threshold": 0.47696847060668035,
+      "threshold": 1.382454137456422,
+      "alert_levels": {
+        "warning": 1.382454137456422,
+        "alarm": 1.9169060098514583
+      },
       "channels": [
         "motor_iq_1",
         "motor_iq_2",
@@ -36,35 +40,40 @@
   },
   "predict_valid": {
     "status": 200,
-    "elapsed_ms": 145.6,
+    "elapsed_ms": 120.3,
     "body": {
-      "is_anomaly": true,
-      "anomaly_score": 0.5027574064848384,
-      "threshold": 0.47696847060668035,
-      "model_version": "robot-ad-1.0.0-iforest-full_18",
+      "is_anomaly": false,
+      "anomaly_score": 1.0205298783950973,
+      "threshold": 1.382454137456422,
+      "alert_level": "normal",
+      "alert_levels": {
+        "warning": 1.382454137456422,
+        "alarm": 1.9169060098514583
+      },
+      "model_version": "robot-ad-1.1.0-mahalanobis+lof-n_neighbors10-multi",
       "schema_version": "robot-cycle-v1",
       "n_points": 1096,
       "reference_deviations": [
         {
+          "channel": "joint_velocity_4",
+          "max_abs_z": 3.258,
+          "feature": "joint_velocity_4__min"
+        },
+        {
           "channel": "motor_iq_4",
-          "max_abs_z": 3.851,
+          "max_abs_z": 2.963,
           "feature": "motor_iq_4__std"
         },
         {
           "channel": "motor_iq_5",
-          "max_abs_z": 3.272,
+          "max_abs_z": 2.497,
           "feature": "motor_iq_5__std"
-        },
-        {
-          "channel": "joint_velocity_4",
-          "max_abs_z": 3.264,
-          "feature": "joint_velocity_4__min"
         }
       ],
-      "reference_deviations_note": "Standardized deviation of channel statistics from fit_normal; an inspection hint, not an explanation of the Isolation Forest score.",
+      "reference_deviations_note": "Standardized deviation of channel statistics from the normal reference; an inspection hint, not an explanation of the anomaly score.",
       "timing_ms": {
-        "features": 1.333,
-        "score": 10.901
+        "validate_and_features": 1.765,
+        "score": 10.124
       }
     }
   },
@@ -79,13 +88,13 @@
   },
   "streamlit_health": 200,
   "api_log_tail": [
-    "2026-11-10 01:29:37,926 INFO robot_ad.api bundle loaded model_version=robot-ad-1.0.0-iforest-full_18",
+    "2026-11-10 02:10:07,621 INFO robot_ad.api bundle loaded model_version=robot-ad-1.1.0-mahalanobis+lof-n_neighbors10-multi warmup_ms=1410.1",
     "INFO:     Application startup complete.",
-    "INFO:     Uvicorn running on http://127.0.0.1:64923 (Press CTRL+C to quit)",
-    "INFO:     127.0.0.1:64925 - \"GET /health HTTP/1.1\" 200 OK",
-    "2026-11-10 01:29:38,597 INFO robot_ad.api predict ok model_version=robot-ad-1.0.0-iforest-full_18 n_points=1096 score=0.502757 is_anomaly=True elapsed_ms=12.33",
-    "INFO:     127.0.0.1:64932 - \"POST /predict HTTP/1.1\" 200 OK",
-    "2026-11-10 01:29:38,733 INFO robot_ad.api predict rejected code=missing_channel elapsed_ms=0.03",
-    "INFO:     127.0.0.1:64933 - \"POST /predict HTTP/1.1\" 422 Unprocessable Entity"
+    "INFO:     Uvicorn running on http://127.0.0.1:61359 (Press CTRL+C to quit)",
+    "INFO:     127.0.0.1:55553 - \"GET /health HTTP/1.1\" 200 OK",
+    "2026-11-10 02:10:08,048 INFO robot_ad.api predict ok model_version=robot-ad-1.1.0-mahalanobis+lof-n_neighbors10-multi n_points=1096 score=1.020530 is_anomaly=False elapsed_ms=12.00",
+    "INFO:     127.0.0.1:55554 - \"POST /predict HTTP/1.1\" 200 OK",
+    "2026-11-10 02:10:08,222 INFO robot_ad.api predict rejected code=missing_channel elapsed_ms=0.02",
+    "INFO:     127.0.0.1:55555 - \"POST /predict HTTP/1.1\" 422 Unprocessable Entity"
   ]
 }

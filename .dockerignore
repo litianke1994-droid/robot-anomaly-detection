@@ -13,5 +13,5 @@ scripts
 *.egg-info
 .pytest_cache
 models/*
-!models/iforest__full_18.joblib
-!models/iforest__full_18.json
+!models/v1_1__selected.joblib
+!models/v1_1__selected.json

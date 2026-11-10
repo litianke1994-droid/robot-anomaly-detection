@@ -19,4 +19,17 @@ Method, model effectiveness and software are judged separately (brief §8).
   were written with an AI assistant.
 - pyarrow pinned to 24.0.0 (26.x is blocked by Windows Smart App Control on
   the dev machine; streamlit 1.67 excludes 25.0.0).
-- Optional PyTorch extension (weeks 11–12): not started.
+- Optional PyTorch extension (weeks 11–12): a 1D-CNN autoencoder was tried in
+  the v1.1 validation search; it did not beat the feature models and is not
+  served (docs/technical_report_v1_1.md §2).
+
+# Acceptance update v1.1 (2026-11-10)
+
+| Item | Status | Evidence |
+|---|---|---|
+| Model effectiveness (v1.1, exploratory) | improved over all v1 models on holdout; **exploratory** label kept | `reports/v1_1/holdout_evaluation.json`: recall 0.827, FPR 0.095, AUC 0.948; paired bootstrap FPR/AUC differences exclude 0 |
+| No test/holdout leakage into choices | evidenced | commits `0f0956b` (protocol + split) → `acc5fc7` (selection frozen) → `6c266ef` (single holdout run); `scripts/12_v11_holdout.py` refuses a second run |
+| Remaining failure | open | BETWEEN_B normal cycles: 56 % warnings, 32 % alarms; collisions recall 0.56–0.63 |
+| Software (v1.1 served) | passed | `reports/consistency.json` (max Δ 9.4e-13, 7/7 invalid rejected), `reports/api_run_evidence.json`, 39 tests, ruff clean |
+| Docker | still not built | `reports/docker_status.md` (clean-venv check added) |
+| Video | still not recorded | `docs/demo_script.md` |

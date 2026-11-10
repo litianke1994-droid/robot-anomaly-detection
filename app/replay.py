@@ -25,7 +25,7 @@ from robot_ad.config import MODELS_DIR, NORMAL_SETTING_NAMES, PROCESSED_DIR  # n
 from robot_ad.predict import Predictor  # noqa: E402
 from robot_ad.schema import InputError, cycle_to_payload  # noqa: E402
 
-BUNDLE = os.environ.get("ROBOT_AD_BUNDLE", str(MODELS_DIR / "iforest__full_18.joblib"))
+BUNDLE = os.environ.get("ROBOT_AD_BUNDLE", str(MODELS_DIR / "v1_1__selected.joblib"))
 
 st.set_page_config(page_title="Robot cycle replay", layout="wide")
 
@@ -50,9 +50,10 @@ except FileNotFoundError:
     pass
 
 st.title("Robot pick-and-place cycle — anomaly replay")
+levels_txt = " · ".join(f"{k} > {v:.3f}" for k, v in pred.levels.items())
 st.caption(
-    f"Model `{pred.model_version}` · schema `{pred.schema_version}` · threshold {pred.threshold:.4f} "
-    "(95 % quantile of calibration normal cycles; alarm if score > threshold)"
+    f"Model `{pred.model_version}` · schema `{pred.schema_version}` · levels: {levels_txt} "
+    "(quantiles of normal calibration cycles: warning = 95 %, alarm = 99 %)"
 )
 
 meta = demo.groupby("sample").first()[["anomaly", "category_name", "setting"]]
@@ -77,11 +78,11 @@ except InputError as e:
     st.stop()
 
 c1, c2, c3 = st.columns(3)
-c1.metric("Model decision", "ANOMALY" if res["is_anomaly"] else "normal")
+c1.metric("Alert level", res["alert_level"].upper())
 c2.metric(
     "Anomaly score",
     f"{res['anomaly_score']:.4f}",
-    delta=f"{res['anomaly_score'] - res['threshold']:+.4f} vs threshold",
+    delta=f"{res['anomaly_score'] - res['threshold']:+.4f} vs warning",
     delta_color="inverse",
 )
 c3.metric("Points / duration", f"{res['n_points']} / {cyc['time'].iloc[-1]:.2f} s")
@@ -104,16 +105,18 @@ st.subheader("Signals")
 dev = pred.bundle["deviation"]
 names = pred.bundle["feature_names"]
 for g in groups:
-    fig, axes = plt.subplots(1, 6, figsize=(18, 2.6), sharex=True)
-    for i, ax in enumerate(axes, start=1):
+    fig, axes = plt.subplots(2, 3, figsize=(14, 5), sharex=True)
+    for i, ax in enumerate(axes.ravel(), start=1):
         ch = f"{g}_{i}"
-        ax.plot(cyc["time"], cyc[ch], lw=0.8, color="C3")
+        ax.plot(cyc["time"], cyc[ch], lw=0.8, color="C3", label="this cycle")
         j = names.index(f"{ch}__mean")
         m, s = dev.mean_[j], dev.std_[j]
-        ax.axhspan(m - 2 * s, m + 2 * s, color="0.85", label="fit_normal mean ± 2 sd of cycle mean")
+        # Band = where the *cycle mean* of normal reference cycles lies; dashed line = this cycle's mean.
+        ax.axhspan(m - 2 * s, m + 2 * s, color="0.85", label="normal cycle-mean ± 2 sd")
+        ax.axhline(cyc[ch].mean(), color="C3", ls="--", lw=0.8, label="this cycle's mean")
         ax.set_title(ch, fontsize=9)
         ax.tick_params(labelsize=7)
-    axes[0].legend(fontsize=6, loc="lower left")
+    axes[0, 0].legend(fontsize=6, loc="lower left")
     fig.tight_layout()
     st.pyplot(fig)
     plt.close(fig)
