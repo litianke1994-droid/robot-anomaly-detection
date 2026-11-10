@@ -1,6 +1,6 @@
 {
-  "created_utc": "2026-11-10T00:23:53+00:00",
-  "git_commit": "unknown",
+  "created_utc": "2026-11-10T00:25:24+00:00",
+  "git_commit": "cef9b9a7a511695537841110d0b0a718feaf5542",
   "test_data_used": false,
   "primary": {
     "model": "iforest",
@@ -109,8 +109,8 @@
           "0.99": 0.13149398953573424
         }
       },
-      "fit_seconds": 0.061,
-      "score_ms_per_cycle": 0.0044,
+      "fit_seconds": 0.109,
+      "score_ms_per_cycle": 0.0027,
       "iforest_seed_stability": null
     },
     {
@@ -153,8 +153,8 @@
           "0.99": 0.5075869888848077
         }
       },
-      "fit_seconds": 0.166,
-      "score_ms_per_cycle": 0.0366,
+      "fit_seconds": 0.178,
+      "score_ms_per_cycle": 0.0367,
       "iforest_seed_stability": {
         "seeds": [
           0,
@@ -255,8 +255,8 @@
           "0.99": 0.14627708476606052
         }
       },
-      "fit_seconds": 0.002,
-      "score_ms_per_cycle": 0.0011,
+      "fit_seconds": 0.003,
+      "score_ms_per_cycle": 0.0009,
       "iforest_seed_stability": null
     },
     {
@@ -299,8 +299,8 @@
           "0.99": 0.5330262025965101
         }
       },
-      "fit_seconds": 0.172,
-      "score_ms_per_cycle": 0.0372,
+      "fit_seconds": 0.177,
+      "score_ms_per_cycle": 0.0381,
       "iforest_seed_stability": {
         "seeds": [
           0,
