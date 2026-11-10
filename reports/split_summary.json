@@ -1,0 +1,26 @@
+{
+  "rule": "blocks of consecutive PRE_A normal sample ids, shuffled with fixed seed, 60/20/20",
+  "block_size": 10,
+  "seed": 20261010,
+  "n_blocks": 95,
+  "counts": {
+    "cal_normal": {
+      "n": 190,
+      "n_anomaly": 0
+    },
+    "dev_normal": {
+      "n": 188,
+      "n_anomaly": 0
+    },
+    "fit_normal": {
+      "n": 570,
+      "n_anomaly": 0
+    },
+    "test": {
+      "n": 1174,
+      "n_anomaly": 755
+    }
+  },
+  "sample_overlap_between_splits": 0,
+  "manifest_sha256": "3ea4b54cff6b1c0b47ac5f43b4996764b0f15514cb262453214cb53425863c21"
+}

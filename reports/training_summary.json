@@ -1,0 +1,323 @@
+{
+  "created_utc": "2026-11-10T00:23:53+00:00",
+  "git_commit": "unknown",
+  "test_data_used": false,
+  "primary": {
+    "model": "iforest",
+    "channel_set": "full_18"
+  },
+  "split_counts": {
+    "fit_normal": 570,
+    "cal_normal": 190,
+    "dev_normal": 188
+  },
+  "fingerprints": {
+    "raw_data_sha256": "c90ab1c78af52651b954d41787f7e89d750f0a128b57600b0e5ceec22621f704",
+    "split_manifest_sha256": "3ea4b54cff6b1c0b47ac5f43b4996764b0f15514cb262453214cb53425863c21",
+    "config_sha256": "f69a2a10fa52bfe7a1a72bfa5492944330e5fe06a25769a37060185a58b255c0",
+    "feature_spec_sha256": "ed26ea692c10a35cb79b693b1245be4050cd56aa882578b710a783e924d0e5ef"
+  },
+  "dependencies": {
+    "python": "3.12.10",
+    "numpy": "2.5.0",
+    "pandas": "3.0.3",
+    "scikit-learn": "1.9.0",
+    "scipy": "1.18.0",
+    "joblib": "1.5.3",
+    "pyarrow": "24.0.0"
+  },
+  "experiments": [
+    {
+      "model": "zscore_max",
+      "channel_set": "full_18",
+      "model_version": "robot-ad-1.0.0-zscore_max-full_18",
+      "n_features": 108,
+      "params": {
+        "constant_std_eps": 1e-12,
+        "constant_features": []
+      },
+      "threshold": {
+        "threshold": 4.048549117775254,
+        "quantile": 0.95,
+        "quantile_method": "linear",
+        "rule": "score > threshold",
+        "n_cal": 190,
+        "n_cal_above": 10,
+        "n_cal_equal": 0,
+        "cal_alarm_rate": 0.05263157894736842
+      },
+      "dev_alarm_rate_at_threshold": 0.0425531914893617,
+      "fit_alarm_rate_at_threshold": 0.06315789473684211,
+      "normal_score_quantiles": {
+        "fit_normal": {
+          "0.5": 2.5285963515030683,
+          "0.95": 4.678003365574873,
+          "0.99": 7.220604347187746
+        },
+        "dev_normal": {
+          "0.5": 2.508891888238325,
+          "0.95": 3.9854285062570645,
+          "0.99": 5.8590711050806314
+        },
+        "cal_normal": {
+          "0.5": 2.5197456704723367,
+          "0.95": 4.048549117775254,
+          "0.99": 5.375971372228724
+        }
+      },
+      "fit_seconds": 0.0,
+      "score_ms_per_cycle": 0.0004,
+      "iforest_seed_stability": null
+    },
+    {
+      "model": "pca_recon",
+      "channel_set": "full_18",
+      "model_version": "robot-ad-1.0.0-pca_recon-full_18",
+      "n_features": 108,
+      "params": {
+        "variance": 0.95,
+        "svd_solver": "full",
+        "n_components": 50,
+        "explained_variance": 0.9536253462633202
+      },
+      "threshold": {
+        "threshold": 0.1040134020643548,
+        "quantile": 0.95,
+        "quantile_method": "linear",
+        "rule": "score > threshold",
+        "n_cal": 190,
+        "n_cal_above": 10,
+        "n_cal_equal": 0,
+        "cal_alarm_rate": 0.05263157894736842
+      },
+      "dev_alarm_rate_at_threshold": 0.026595744680851064,
+      "fit_alarm_rate_at_threshold": 0.005263157894736842,
+      "normal_score_quantiles": {
+        "fit_normal": {
+          "0.5": 0.04422337051087693,
+          "0.95": 0.07398038370401161,
+          "0.99": 0.09526726299495486
+        },
+        "dev_normal": {
+          "0.5": 0.058384654156370855,
+          "0.95": 0.09662499564179788,
+          "0.99": 0.130555433228351
+        },
+        "cal_normal": {
+          "0.5": 0.06350887189069815,
+          "0.95": 0.1040134020643548,
+          "0.99": 0.13149398953573424
+        }
+      },
+      "fit_seconds": 0.061,
+      "score_ms_per_cycle": 0.0044,
+      "iforest_seed_stability": null
+    },
+    {
+      "model": "iforest",
+      "channel_set": "full_18",
+      "model_version": "robot-ad-1.0.0-iforest-full_18",
+      "n_features": 108,
+      "params": {
+        "n_estimators": 300,
+        "max_samples": "auto",
+        "max_features": 1.0,
+        "random_state": 42
+      },
+      "threshold": {
+        "threshold": 0.47696847060668035,
+        "quantile": 0.95,
+        "quantile_method": "linear",
+        "rule": "score > threshold",
+        "n_cal": 190,
+        "n_cal_above": 10,
+        "n_cal_equal": 0,
+        "cal_alarm_rate": 0.05263157894736842
+      },
+      "dev_alarm_rate_at_threshold": 0.047872340425531915,
+      "fit_alarm_rate_at_threshold": 0.08070175438596491,
+      "normal_score_quantiles": {
+        "fit_normal": {
+          "0.5": 0.4340524559248308,
+          "0.95": 0.48423503084477987,
+          "0.99": 0.5404338321589279
+        },
+        "dev_normal": {
+          "0.5": 0.4315218912939931,
+          "0.95": 0.47618671352696457,
+          "0.99": 0.5078191730112649
+        },
+        "cal_normal": {
+          "0.5": 0.4364807304757276,
+          "0.95": 0.47696847060668035,
+          "0.99": 0.5075869888848077
+        }
+      },
+      "fit_seconds": 0.166,
+      "score_ms_per_cycle": 0.0366,
+      "iforest_seed_stability": {
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "dev_spearman_vs_frozen_seed_min": 0.9283285203185077,
+        "dev_alarm_rate_per_seed": [
+          0.026595744680851064,
+          0.010638297872340425,
+          0.06382978723404255,
+          0.010638297872340425,
+          0.03723404255319149
+        ]
+      }
+    },
+    {
+      "model": "zscore_max",
+      "channel_set": "current_6",
+      "model_version": "robot-ad-1.0.0-zscore_max-current_6",
+      "n_features": 36,
+      "params": {
+        "constant_std_eps": 1e-12,
+        "constant_features": []
+      },
+      "threshold": {
+        "threshold": 3.199446028631519,
+        "quantile": 0.95,
+        "quantile_method": "linear",
+        "rule": "score > threshold",
+        "n_cal": 190,
+        "n_cal_above": 10,
+        "n_cal_equal": 0,
+        "cal_alarm_rate": 0.05263157894736842
+      },
+      "dev_alarm_rate_at_threshold": 0.0851063829787234,
+      "fit_alarm_rate_at_threshold": 0.054385964912280704,
+      "normal_score_quantiles": {
+        "fit_normal": {
+          "0.5": 2.174884184434231,
+          "0.95": 3.260070989569808,
+          "0.99": 3.7540784817881296
+        },
+        "dev_normal": {
+          "0.5": 2.2318649897625473,
+          "0.95": 3.462690153823611,
+          "0.99": 3.9677766195935797
+        },
+        "cal_normal": {
+          "0.5": 2.2212190925579027,
+          "0.95": 3.199446028631519,
+          "0.99": 3.6295103876654955
+        }
+      },
+      "fit_seconds": 0.0,
+      "score_ms_per_cycle": 0.0001,
+      "iforest_seed_stability": null
+    },
+    {
+      "model": "pca_recon",
+      "channel_set": "current_6",
+      "model_version": "robot-ad-1.0.0-pca_recon-current_6",
+      "n_features": 36,
+      "params": {
+        "variance": 0.95,
+        "svd_solver": "full",
+        "n_components": 23,
+        "explained_variance": 0.9575999723249392
+      },
+      "threshold": {
+        "threshold": 0.10832238117447406,
+        "quantile": 0.95,
+        "quantile_method": "linear",
+        "rule": "score > threshold",
+        "n_cal": 190,
+        "n_cal_above": 10,
+        "n_cal_equal": 0,
+        "cal_alarm_rate": 0.05263157894736842
+      },
+      "dev_alarm_rate_at_threshold": 0.05319148936170213,
+      "fit_alarm_rate_at_threshold": 0.021052631578947368,
+      "normal_score_quantiles": {
+        "fit_normal": {
+          "0.5": 0.0371889892858049,
+          "0.95": 0.08901997373849692,
+          "0.99": 0.13105109406172666
+        },
+        "dev_normal": {
+          "0.5": 0.04265863037299787,
+          "0.95": 0.11085913329322965,
+          "0.99": 0.15007640752099127
+        },
+        "cal_normal": {
+          "0.5": 0.04584311377452893,
+          "0.95": 0.10832238117447406,
+          "0.99": 0.14627708476606052
+        }
+      },
+      "fit_seconds": 0.002,
+      "score_ms_per_cycle": 0.0011,
+      "iforest_seed_stability": null
+    },
+    {
+      "model": "iforest",
+      "channel_set": "current_6",
+      "model_version": "robot-ad-1.0.0-iforest-current_6",
+      "n_features": 36,
+      "params": {
+        "n_estimators": 300,
+        "max_samples": "auto",
+        "max_features": 1.0,
+        "random_state": 42
+      },
+      "threshold": {
+        "threshold": 0.4985310711361019,
+        "quantile": 0.95,
+        "quantile_method": "linear",
+        "rule": "score > threshold",
+        "n_cal": 190,
+        "n_cal_above": 10,
+        "n_cal_equal": 0,
+        "cal_alarm_rate": 0.05263157894736842
+      },
+      "dev_alarm_rate_at_threshold": 0.026595744680851064,
+      "fit_alarm_rate_at_threshold": 0.028070175438596492,
+      "normal_score_quantiles": {
+        "fit_normal": {
+          "0.5": 0.4387887447674029,
+          "0.95": 0.48801867772097546,
+          "0.99": 0.5220052842334213
+        },
+        "dev_normal": {
+          "0.5": 0.44076263309841623,
+          "0.95": 0.48681415240287484,
+          "0.99": 0.5113896660434645
+        },
+        "cal_normal": {
+          "0.5": 0.4396824722881699,
+          "0.95": 0.4985310711361019,
+          "0.99": 0.5330262025965101
+        }
+      },
+      "fit_seconds": 0.172,
+      "score_ms_per_cycle": 0.0372,
+      "iforest_seed_stability": {
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "dev_spearman_vs_frozen_seed_min": 0.9477358964217536,
+        "dev_alarm_rate_per_seed": [
+          0.026595744680851064,
+          0.05319148936170213,
+          0.03723404255319149,
+          0.015957446808510637,
+          0.047872340425531915
+        ]
+      }
+    }
+  ]
+}

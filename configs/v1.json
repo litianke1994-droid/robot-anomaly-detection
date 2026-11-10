@@ -1,0 +1,52 @@
+{
+  "project_version": "1.0.0",
+  "schema_version": "robot-cycle-v1",
+  "data": {
+    "raw_path": "data/raw/voraus-ad-dataset-100hz.parquet",
+    "expected_sha256": "c90ab1c78af52651b954d41787f7e89d750f0a128b57600b0e5ceec22621f704",
+    "train_setting_code": 72,
+    "train_setting_name": "PRE_A"
+  },
+  "channels": {
+    "full_18": [
+      "motor_iq_1", "motor_iq_2", "motor_iq_3", "motor_iq_4", "motor_iq_5", "motor_iq_6",
+      "joint_velocity_1", "joint_velocity_2", "joint_velocity_3", "joint_velocity_4", "joint_velocity_5", "joint_velocity_6",
+      "torque_sensor_a_1", "torque_sensor_a_2", "torque_sensor_a_3", "torque_sensor_a_4", "torque_sensor_a_5", "torque_sensor_a_6"
+    ],
+    "current_6": [
+      "motor_iq_1", "motor_iq_2", "motor_iq_3", "motor_iq_4", "motor_iq_5", "motor_iq_6"
+    ]
+  },
+  "features": {
+    "stats": ["mean", "std", "min", "max", "rms", "q95_abs"],
+    "std_ddof": 0,
+    "quantile_method": "linear"
+  },
+  "split": {
+    "fractions": {"fit_normal": 0.6, "dev_normal": 0.2, "cal_normal": 0.2},
+    "block_size": 10,
+    "seed": 20261010
+  },
+  "models": {
+    "zscore_max": {"constant_std_eps": 1e-12},
+    "pca_recon": {"variance": 0.95, "svd_solver": "full"},
+    "iforest": {"n_estimators": 300, "max_samples": "auto", "max_features": 1.0, "random_state": 42}
+  },
+  "threshold": {"cal_quantile": 0.95, "quantile_method": "linear", "rule": "score > threshold"},
+  "primary": {"model": "iforest", "channel_set": "full_18"},
+  "experiments": [
+    {"model": "zscore_max", "channel_set": "full_18"},
+    {"model": "pca_recon", "channel_set": "full_18"},
+    {"model": "iforest", "channel_set": "full_18"},
+    {"model": "zscore_max", "channel_set": "current_6"},
+    {"model": "pca_recon", "channel_set": "current_6"},
+    {"model": "iforest", "channel_set": "current_6"}
+  ],
+  "input_validation": {
+    "min_length": 900,
+    "max_length": 1300,
+    "dt_min_s": 0.005,
+    "dt_max_s": 0.02
+  },
+  "deviation_hint": {"top_k": 3}
+}

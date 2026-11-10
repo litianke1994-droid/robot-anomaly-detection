@@ -1,0 +1,23 @@
+# environments
+.venv/
+.venv-1/
+__pycache__/
+*.egg-info/
+.pytest_cache/
+build/
+
+# data: raw voraus-AD files are CC BY-NC-SA 4.0 and large -> never commit
+data/raw/
+data/processed/
+data/examples/
+
+# fitted model bundles (derived from the dataset; rebuilt by the pipeline)
+models/
+
+# local
+.ipynb_checkpoints/
+*.log
+.claude/
+
+# personal planning documents (kept local)
+*.pdf

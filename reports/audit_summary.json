@@ -1,0 +1,348 @@
+{
+  "file": {
+    "path": "data/raw/voraus-ad-dataset-100hz.parquet",
+    "bytes": 1115942833,
+    "sha256": "c90ab1c78af52651b954d41787f7e89d750f0a128b57600b0e5ceec22621f704",
+    "sha256_matches_download_record": true,
+    "parquet_rows": 2321690,
+    "parquet_columns": 137,
+    "row_groups": 1
+  },
+  "read": {
+    "columns_read": [
+      "sample",
+      "time",
+      "anomaly",
+      "category",
+      "setting",
+      "motor_iq_1",
+      "motor_iq_2",
+      "motor_iq_3",
+      "motor_iq_4",
+      "motor_iq_5",
+      "motor_iq_6",
+      "joint_velocity_1",
+      "joint_velocity_2",
+      "joint_velocity_3",
+      "joint_velocity_4",
+      "joint_velocity_5",
+      "joint_velocity_6",
+      "torque_sensor_a_1",
+      "torque_sensor_a_2",
+      "torque_sensor_a_3",
+      "torque_sensor_a_4",
+      "torque_sensor_a_5",
+      "torque_sensor_a_6"
+    ],
+    "seconds": 0.3,
+    "hash_seconds": 0.8,
+    "dataframe_memory_mb": 391.9
+  },
+  "schema_selected": {
+    "sample": "int64",
+    "time": "double",
+    "anomaly": "bool",
+    "category": "int64",
+    "setting": "int64",
+    "motor_iq_1": "double",
+    "motor_iq_2": "double",
+    "motor_iq_3": "double",
+    "motor_iq_4": "double",
+    "motor_iq_5": "double",
+    "motor_iq_6": "double",
+    "joint_velocity_1": "double",
+    "joint_velocity_2": "double",
+    "joint_velocity_3": "double",
+    "joint_velocity_4": "double",
+    "joint_velocity_5": "double",
+    "joint_velocity_6": "double",
+    "torque_sensor_a_1": "double",
+    "torque_sensor_a_2": "double",
+    "torque_sensor_a_3": "double",
+    "torque_sensor_a_4": "double",
+    "torque_sensor_a_5": "double",
+    "torque_sensor_a_6": "double"
+  },
+  "cycles": {
+    "n_cycles": 2122,
+    "sample_id_min": 0,
+    "sample_id_max": 2121,
+    "sample_ids_contiguous_in_file": true,
+    "sample_ids_are_0_to_n_minus_1": true,
+    "train_sample_id_range": [
+      755,
+      1702
+    ],
+    "labels_constant_within_cycle": true,
+    "category_12_iff_normal": true
+  },
+  "counts_measured": {
+    "train_normal": 948,
+    "train_anomaly": 0,
+    "test_normal": 419,
+    "test_anomaly": 755
+  },
+  "counts_paper": {
+    "train_normal": 948,
+    "test_normal": 419,
+    "test_anomaly": 755
+  },
+  "counts_match_paper": true,
+  "test_anomaly_per_category": {
+    "AXIS_FRICTION": 144,
+    "AXIS_WEIGHT": 156,
+    "COLLISION_FOAM": 72,
+    "COLLISION_CABLE": 48,
+    "COLLISION_CARTON": 22,
+    "MISS_CAN": 11,
+    "LOSE_CAN": 74,
+    "CAN_WEIGHT": 80,
+    "ENTANGLED": 10,
+    "INVALID_POSITION": 12,
+    "MOTOR_COMMUTATION": 89,
+    "WOBBLING_STATION": 37,
+    "NORMAL_OPERATION": 419
+  },
+  "normal_cycles_per_setting": {
+    "PRE_A": 948,
+    "PRE_B": 319,
+    "BETWEEN_A": 37,
+    "BETWEEN_B": 44,
+    "BETWEEN_C": 19
+  },
+  "cycle_length_points": {
+    "all": {
+      "count": 2122.0,
+      "mean": 1094.1046182846371,
+      "std": 23.22824832799478,
+      "min": 986.0,
+      "25%": 1082.0,
+      "50%": 1096.0,
+      "75%": 1110.0,
+      "max": 1164.0
+    },
+    "train_normal": {
+      "count": 948.0,
+      "mean": 1089.2668776371308,
+      "std": 19.301024477731083,
+      "min": 1028.0,
+      "25%": 1069.0,
+      "50%": 1083.0,
+      "75%": 1096.0,
+      "max": 1164.0
+    },
+    "test": {
+      "count": 1174.0,
+      "mean": 1098.011073253833,
+      "std": 25.311374743981496,
+      "min": 986.0,
+      "25%": 1082.0,
+      "50%": 1096.0,
+      "75%": 1110.0,
+      "max": 1164.0
+    }
+  },
+  "time": {
+    "n_non_increasing_steps": 0,
+    "dt_min_s": 0.00845193862915039,
+    "dt_median_s": 0.010066986083984375,
+    "dt_max_s": 0.01211094856262207,
+    "t_start_max_s": 0.010062932968139648
+  },
+  "quality": {
+    "nan_per_channel": {
+      "motor_iq_1": 0,
+      "motor_iq_2": 0,
+      "motor_iq_3": 0,
+      "motor_iq_4": 0,
+      "motor_iq_5": 0,
+      "motor_iq_6": 0,
+      "joint_velocity_1": 0,
+      "joint_velocity_2": 0,
+      "joint_velocity_3": 0,
+      "joint_velocity_4": 0,
+      "joint_velocity_5": 0,
+      "joint_velocity_6": 0,
+      "torque_sensor_a_1": 0,
+      "torque_sensor_a_2": 0,
+      "torque_sensor_a_3": 0,
+      "torque_sensor_a_4": 0,
+      "torque_sensor_a_5": 0,
+      "torque_sensor_a_6": 0
+    },
+    "inf_per_channel": {
+      "motor_iq_1": 0,
+      "motor_iq_2": 0,
+      "motor_iq_3": 0,
+      "motor_iq_4": 0,
+      "motor_iq_5": 0,
+      "motor_iq_6": 0,
+      "joint_velocity_1": 0,
+      "joint_velocity_2": 0,
+      "joint_velocity_3": 0,
+      "joint_velocity_4": 0,
+      "joint_velocity_5": 0,
+      "joint_velocity_6": 0,
+      "torque_sensor_a_1": 0,
+      "torque_sensor_a_2": 0,
+      "torque_sensor_a_3": 0,
+      "torque_sensor_a_4": 0,
+      "torque_sensor_a_5": 0,
+      "torque_sensor_a_6": 0
+    },
+    "duplicate_sample_time_rows": 0,
+    "duplicate_cycles_identical_signals": 0,
+    "cycles_with_constant_channel": {
+      "motor_iq_1": 0,
+      "motor_iq_2": 0,
+      "motor_iq_3": 0,
+      "motor_iq_4": 0,
+      "motor_iq_5": 0,
+      "motor_iq_6": 0,
+      "joint_velocity_1": 0,
+      "joint_velocity_2": 0,
+      "joint_velocity_3": 0,
+      "joint_velocity_4": 0,
+      "joint_velocity_5": 0,
+      "joint_velocity_6": 0,
+      "torque_sensor_a_1": 0,
+      "torque_sensor_a_2": 0,
+      "torque_sensor_a_3": 0,
+      "torque_sensor_a_4": 0,
+      "torque_sensor_a_5": 0,
+      "torque_sensor_a_6": 0
+    }
+  },
+  "channel_value_ranges": {
+    "motor_iq_1": {
+      "min": -4.844717502593994,
+      "p01": -2.9237940549850463,
+      "median": -0.19652125239372253,
+      "p99": 3.2515909123420714,
+      "max": 5.387790203094482
+    },
+    "motor_iq_2": {
+      "min": -2.0412957668304443,
+      "p01": 0.5976688915491104,
+      "median": 4.429614782333374,
+      "p99": 7.272753262519833,
+      "max": 9.536296844482422
+    },
+    "motor_iq_3": {
+      "min": -7.028480529785156,
+      "p01": -5.353262486457825,
+      "median": -3.038740396499634,
+      "p99": -0.8257379621267337,
+      "max": 3.0240795612335205
+    },
+    "motor_iq_4": {
+      "min": -2.002063274383545,
+      "p01": -1.3743134653568267,
+      "median": -0.8151224255561829,
+      "p99": -0.057874991893768386,
+      "max": 2.627824306488037
+    },
+    "motor_iq_5": {
+      "min": -0.7904334664344788,
+      "p01": -0.4116592073440552,
+      "median": 0.06962200254201889,
+      "p99": 0.4157176911830902,
+      "max": 1.170530080795288
+    },
+    "motor_iq_6": {
+      "min": -1.3961490392684937,
+      "p01": -0.8553559464216233,
+      "median": -0.009507103823125362,
+      "p99": 0.8215550017356861,
+      "max": 1.2937307357788086
+    },
+    "joint_velocity_1": {
+      "min": -2.283517599105835,
+      "p01": -2.0421788358688353,
+      "median": -0.00016426817455794662,
+      "p99": 2.100071280002592,
+      "max": 2.3286945819854736
+    },
+    "joint_velocity_2": {
+      "min": -0.7898420691490173,
+      "p01": -0.6112464916706085,
+      "median": 0.0006313499761745334,
+      "p99": 0.8015491092205047,
+      "max": 0.9358011484146118
+    },
+    "joint_velocity_3": {
+      "min": -0.6254018545150757,
+      "p01": -0.5353972309827805,
+      "median": 0.00014911073230905458,
+      "p99": 0.7231092160940151,
+      "max": 1.078438401222229
+    },
+    "joint_velocity_4": {
+      "min": -1.2512071132659912,
+      "p01": -0.9965510630607605,
+      "median": -0.000299634673865512,
+      "p99": 1.2968181884288785,
+      "max": 1.5600097179412842
+    },
+    "joint_velocity_5": {
+      "min": -0.47900089621543884,
+      "p01": -0.4078077006340027,
+      "median": 9.749869423103519e-05,
+      "p99": 0.7871590298414227,
+      "max": 0.9887507557868958
+    },
+    "joint_velocity_6": {
+      "min": -2.3298397064208984,
+      "p01": -2.0721560406684874,
+      "median": 2.1414053662738297e-05,
+      "p99": 1.939600847959518,
+      "max": 2.126391649246216
+    },
+    "torque_sensor_a_1": {
+      "min": -20.32207679748535,
+      "p01": -10.738943099975586,
+      "median": -0.12343597412109375,
+      "p99": 12.601707458496094,
+      "max": 19.985431671142578
+    },
+    "torque_sensor_a_2": {
+      "min": -26.41193389892578,
+      "p01": 18.940555572509766,
+      "median": 45.70072555541992,
+      "p99": 61.88231658935547,
+      "max": 76.1705551147461
+    },
+    "torque_sensor_a_3": {
+      "min": -52.59627151489258,
+      "p01": -39.00596237182617,
+      "median": -32.84049606323242,
+      "p99": -21.122821807861328,
+      "max": 35.01249694824219
+    },
+    "torque_sensor_a_4": {
+      "min": -9.749631881713867,
+      "p01": -6.856176853179932,
+      "median": -4.919589519500732,
+      "p99": -2.905881404876709,
+      "max": 18.09095001220703
+    },
+    "torque_sensor_a_5": {
+      "min": -5.178792953491211,
+      "p01": -1.370371699333191,
+      "median": -0.12045824527740479,
+      "p99": 0.8360481858253479,
+      "max": 6.677779674530029
+    },
+    "torque_sensor_a_6": {
+      "min": -1.069434642791748,
+      "p01": -0.2625218629837036,
+      "median": 0.013818144798278809,
+      "p99": 0.2791045904159546,
+      "max": 1.4148619174957275
+    }
+  },
+  "notes": [
+    "Units (A, rad/s, N*m) follow the paper signal table and the field names; the Parquet file carries no unit metadata. 待核实 against the paper table.",
+    "Cycle duration is analysed separately and is not a v1 feature."
+  ]
+}

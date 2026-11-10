@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "robot-ad"
+version = "1.0.0"
+description = "Cycle-level anomaly detection for a pick-and-place robot (voraus-AD, 100 Hz)"
+requires-python = ">=3.11"
+license = {text = "MIT"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
