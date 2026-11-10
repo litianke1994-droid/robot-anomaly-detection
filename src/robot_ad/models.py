@@ -150,7 +150,11 @@ class KNNDistance(_Scaled):
     def fit(self, X, feature_names=None):
         from sklearn.neighbors import NearestNeighbors
 
-        self.nn_ = NearestNeighbors(n_neighbors=self.k).fit(self._fit_scaler(X))
+        Z = self._fit_scaler(X)
+        self.nn_ = NearestNeighbors(n_neighbors=self.k).fit(Z)
+        # Leave-one-out training scores: a training point's nearest neighbour is itself (distance 0).
+        d, _ = self.nn_.kneighbors(Z, n_neighbors=self.k + 1)
+        self.train_scores_ = d[:, 1:].mean(axis=1)
         return self
 
     def score(self, X):
@@ -173,6 +177,7 @@ class LOF(_Scaled):
         from sklearn.neighbors import LocalOutlierFactor
 
         self.model_ = LocalOutlierFactor(n_neighbors=self.n_neighbors, novelty=True).fit(self._fit_scaler(X))
+        self.train_scores_ = -self.model_.negative_outlier_factor_  # training LOF excludes the point itself
         return self
 
     def score(self, X):

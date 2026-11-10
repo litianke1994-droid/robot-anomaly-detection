@@ -15,26 +15,53 @@ Output: reports/consistency.json
 
 from __future__ import annotations
 
+import argparse
 import json
+import os
 import subprocess
 import sys
+from pathlib import Path
 
+import numpy as np
 import pandas as pd
 from fastapi.testclient import TestClient
 
 from robot_ad.bundle import now_utc
-from robot_ad.config import EXAMPLES_DIR, MODELS_DIR, PROJECT_ROOT, REPORTS_DIR
+from robot_ad.cli import DEFAULT_BUNDLE
+from robot_ad.config import EXAMPLES_DIR, PROCESSED_DIR, PROJECT_ROOT, REPORTS_DIR, load_config, raw_path
 from robot_ad.predict import Predictor
 
 TOL = 1e-6
 
 
+def batch_scores(pred: Predictor, samples: list[int]) -> pd.Series:
+    """Batch path: precomputed feature table (+ resampled raw sequences if the model needs them)."""
+    feats = pd.read_parquet(PROCESSED_DIR / "features_v1.parquet").loc[samples, pred.bundle["feature_names"]]
+    det = pred.scorer if pred.scorer is not None else pred.bundle["detector"]
+    if pred.scorer is not None and pred.scorer.needs_sequence:
+        from robot_ad.sequence import resample_cycle
+
+        cfg = load_config()
+        df = pd.read_parquet(
+            raw_path(cfg), columns=["sample", "time"] + pred.channels, filters=[("sample", "in", samples)]
+        )
+        seq = {s: resample_cycle(g["time"].to_numpy(), g[pred.channels].to_numpy()) for s, g in df.groupby("sample")}
+        S = np.stack([seq[s] for s in samples])
+        return pd.Series(det.score(feats.to_numpy(), S), index=samples)
+    if pred.scorer is not None:
+        return pd.Series(det.score(feats.to_numpy(), None), index=samples)
+    return pd.Series(det.score(feats.to_numpy()), index=samples)
+
+
 def main() -> None:
-    bundle_path = MODELS_DIR / "iforest__full_18.joblib"
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--bundle", default=str(DEFAULT_BUNDLE))
+    bundle_path = Path(ap.parse_args().bundle)
+    os.environ["ROBOT_AD_BUNDLE"] = str(bundle_path)  # the API must serve the same bundle
     pred = Predictor.from_path(bundle_path)
     pv = pred.model_version
-    batch = pd.read_csv(REPORTS_DIR / "test_scores.csv", index_col="sample")[pv]
     index = json.loads((EXAMPLES_DIR / "index.json").read_text(encoding="utf-8"))
+    batch = batch_scores(pred, [item["sample"] for item in index])
 
     sys.path.insert(0, str(PROJECT_ROOT))  # make the top-level api package importable
     from api.main import app

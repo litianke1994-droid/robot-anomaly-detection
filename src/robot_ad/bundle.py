@@ -51,7 +51,7 @@ def save_bundle(bundle: dict, path: str | Path) -> None:
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     joblib.dump(bundle, path)
-    meta = {k: v for k, v in bundle.items() if k not in ("detector", "deviation")}
+    meta = {k: v for k, v in bundle.items() if k not in ("detector", "deviation", "scorer")}
     with open(path.with_suffix(".json"), "w", encoding="utf-8") as fh:
         json.dump(meta, fh, indent=2, ensure_ascii=False)
 

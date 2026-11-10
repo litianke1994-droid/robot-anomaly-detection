@@ -40,8 +40,24 @@ class Predictor:
     def features(self, signals: np.ndarray) -> np.ndarray:
         return cycle_features(signals, std_ddof=self.spec["std_ddof"], quantile_method=self.spec["quantile_method"])
 
+    @property
+    def scorer(self):
+        """v1.1+ bundles carry a CycleScorer (features and/or sequences); v1 bundles a feature detector."""
+        return self.bundle.get("scorer")
+
     def score_features(self, X: np.ndarray) -> np.ndarray:
+        """Feature-only scoring (v1 bundles, or v1.1 scorers without a sequence member)."""
+        if self.scorer is not None:
+            return self.scorer.score(np.atleast_2d(X), None)
         return self.bundle["detector"].score(np.atleast_2d(X))
+
+    def score_cycle(self, x: np.ndarray, time_s: np.ndarray, signals: np.ndarray) -> float:
+        if self.scorer is not None and self.scorer.needs_sequence:
+            from .sequence import resample_cycle
+
+            seq = resample_cycle(time_s, signals)[None]
+            return float(self.scorer.score(np.atleast_2d(x), seq)[0])
+        return float(self.score_features(x)[0])
 
     def deviation_hints(self, x: np.ndarray) -> list[dict]:
         """Per-channel max |z| against fit_normal statistics. Auxiliary hint, not a causal explanation."""
@@ -65,10 +81,10 @@ class Predictor:
 
     def predict_payload(self, payload: Any) -> dict:
         t0 = time.perf_counter()
-        _, signals = validate_cycle(payload, self.rules)
+        time_s, signals = validate_cycle(payload, self.rules)
         x = self.features(signals)
         t1 = time.perf_counter()
-        score = float(self.score_features(x)[0])
+        score = self.score_cycle(x, time_s, signals)
         t2 = time.perf_counter()
         return {
             "is_anomaly": bool(score > self.threshold),
@@ -81,8 +97,8 @@ class Predictor:
             "n_points": int(signals.shape[0]),
             "reference_deviations": self.deviation_hints(x),
             "reference_deviations_note": (
-                "Standardized deviation of channel statistics from fit_normal; "
-                "an inspection hint, not an explanation of the Isolation Forest score."
+                "Standardized deviation of channel statistics from the normal reference; "
+                "an inspection hint, not an explanation of the anomaly score."
             ),
             "timing_ms": {"validate_and_features": round((t1 - t0) * 1e3, 3), "score": round((t2 - t1) * 1e3, 3)},
         }

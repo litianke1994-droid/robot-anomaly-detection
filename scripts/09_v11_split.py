@@ -35,13 +35,13 @@ def main() -> None:
     role = man["split"].copy()  # fit_normal / dev_normal / cal_normal keep their v1 roles
 
     test = man[man["split"] == "test"]
-    for setting, g in test[~test["anomaly"]].groupby("setting"):
+    for _setting, g in test[~test["anomaly"]].groupby("setting"):
         val, hold = block_halves(g.index.to_numpy(), sp["block_size"], rng, sp["validation_fraction"])
         vfit, vcal = block_halves(np.array(val), sp["block_size"], rng, sp["val_normal_fit_fraction"])
         role.loc[vfit] = "val_normal_fit"
         role.loc[vcal] = "val_normal_cal"
         role.loc[hold] = "holdout"
-    for cat, g in test[test["anomaly"]].groupby("category_name"):
+    for _cat, g in test[test["anomaly"]].groupby("category_name"):
         val, hold = block_halves(g.index.to_numpy(), sp["block_size"], rng, sp["validation_fraction"])
         role.loc[val] = "val_anomaly"
         role.loc[hold] = "holdout"
@@ -71,7 +71,8 @@ def main() -> None:
     summary = {
         "counts": counts,
         "holdout_anomaly_per_category": {
-            k: int(v) for k, v in t[(t["role_v1_1"] == "holdout") & t["anomaly"]].groupby("category_name").size().items()
+            k: int(v)
+            for k, v in t[(t["role_v1_1"] == "holdout") & t["anomaly"]].groupby("category_name").size().items()
         },
         "manifest_sha256": sha256_bytes((OUT / "split_manifest_v1_1.csv").read_bytes()),
     }
