@@ -1,0 +1,33 @@
+{
+  "project_version": "1.1.0",
+  "schema_version": "robot-cycle-v1",
+  "base_config": "configs/v1.json",
+  "split": {
+    "source": "official test part of reports/split_manifest.csv (v1)",
+    "stratify_normal_by": "setting",
+    "stratify_anomaly_by": "category",
+    "block_size": 5,
+    "seed": 20261110,
+    "validation_fraction": 0.5,
+    "val_normal_fit_fraction": 0.5
+  },
+  "reference_options": {
+    "pre_a": "fit on fit_normal (PRE_A) only",
+    "multi": "fit on fit_normal (PRE_A) + val_normal_fit (other normal settings)"
+  },
+  "calibration": {
+    "pool": "cal_normal (PRE_A) + val_normal_cal (other normal settings)",
+    "levels": {"warning": 0.95, "alarm": 0.99},
+    "primary_level": "warning",
+    "quantile_method": "linear",
+    "rule": "score > threshold"
+  },
+  "search": {
+    "repeats": 5,
+    "repeat_seed": 7,
+    "criterion": "mean over repeats of TPR at 5% FPR (val anomalies vs calibration-pool normals not used for fitting)",
+    "tie_break": "mean ROC-AUC on the same data",
+    "holdout_used": false
+  },
+  "channels": "full_18"
+}

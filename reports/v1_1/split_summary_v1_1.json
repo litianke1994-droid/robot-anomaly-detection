@@ -1,0 +1,54 @@
+{
+  "counts": {
+    "val_normal_fit": {
+      "n": 103,
+      "n_anomaly": 0,
+      "normal_by_setting": {
+        "73": 79,
+        "74": 10,
+        "75": 9,
+        "76": 5
+      }
+    },
+    "val_normal_cal": {
+      "n": 105,
+      "n_anomaly": 0,
+      "normal_by_setting": {
+        "73": 80,
+        "74": 10,
+        "75": 10,
+        "76": 5
+      }
+    },
+    "val_anomaly": {
+      "n": 386,
+      "n_anomaly": 386,
+      "normal_by_setting": {}
+    },
+    "holdout": {
+      "n": 580,
+      "n_anomaly": 369,
+      "normal_by_setting": {
+        "73": 160,
+        "74": 17,
+        "75": 25,
+        "76": 9
+      }
+    }
+  },
+  "holdout_anomaly_per_category": {
+    "AXIS_FRICTION": 74,
+    "AXIS_WEIGHT": 76,
+    "CAN_WEIGHT": 40,
+    "COLLISION_CABLE": 25,
+    "COLLISION_CARTON": 12,
+    "COLLISION_FOAM": 35,
+    "ENTANGLED": 5,
+    "INVALID_POSITION": 5,
+    "LOSE_CAN": 35,
+    "MISS_CAN": 1,
+    "MOTOR_COMMUTATION": 44,
+    "WOBBLING_STATION": 17
+  },
+  "manifest_sha256": "853c4e9afd4771ea18fa6c70974d8fe6ba5bd1cb2034447fea49b133441377c6"
+}
