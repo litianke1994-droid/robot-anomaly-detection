@@ -30,7 +30,9 @@ def main() -> None:
     sp = cfg["split"]
     meta = pd.read_csv(REPORTS_DIR / "cycle_metadata.csv", index_col="sample")
 
-    train_ids = np.sort(meta.index[(meta["setting"] == cfg["data"]["train_setting_code"]) & (~meta["anomaly"])].to_numpy())
+    train_ids = np.sort(
+        meta.index[(meta["setting"] == cfg["data"]["train_setting_code"]) & (~meta["anomaly"])].to_numpy()
+    )
     test_ids = np.sort(meta.index[meta["setting"] != cfg["data"]["train_setting_code"]].to_numpy())
     assert not meta.loc[meta["setting"] == cfg["data"]["train_setting_code"], "anomaly"].any()
 

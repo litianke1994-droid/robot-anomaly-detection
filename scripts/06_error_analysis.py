@@ -20,14 +20,24 @@ import numpy as np
 import pandas as pd
 
 from robot_ad.bundle import load_bundle
-from robot_ad.config import FIGURES_DIR, MODELS_DIR, NORMAL_SETTING_NAMES, PROCESSED_DIR, REPORTS_DIR, load_config, raw_path
+from robot_ad.config import (
+    FIGURES_DIR,
+    MODELS_DIR,
+    NORMAL_SETTING_NAMES,
+    PROCESSED_DIR,
+    REPORTS_DIR,
+    load_config,
+    raw_path,
+)
 from robot_ad.predict import Predictor
 
 GROUPS = {"motor_iq": "current", "joint_velocity": "velocity", "torque_sensor_a": "torque"}
 
 
 def read_cycles(path, samples, columns):
-    df = pd.read_parquet(path, columns=["sample", "time"] + columns, filters=[("sample", "in", list(map(int, samples)))])
+    df = pd.read_parquet(
+        path, columns=["sample", "time"] + columns, filters=[("sample", "in", list(map(int, samples)))]
+    )
     return {int(s): g.reset_index(drop=True) for s, g in df.groupby("sample")}
 
 
@@ -116,9 +126,11 @@ def main() -> None:
     dev = bundle["deviation"]
     normal_ids = man.index[(~man["anomaly"])]
     Z = np.abs(dev.zscores(feats.loc[normal_ids, bundle["feature_names"]].to_numpy()))
-    role = man.loc[normal_ids].apply(
-        lambda r: r["split"] if r["split"] != "test" else NORMAL_SETTING_NAMES[int(r["setting"])], axis=1
-    ).to_numpy()
+    role = (
+        man.loc[normal_ids]
+        .apply(lambda r: r["split"] if r["split"] != "test" else NORMAL_SETTING_NAMES[int(r["setting"])], axis=1)
+        .to_numpy()
+    )
     names = bundle["feature_names"]
     drift = []
     for g in ["fit_normal", "dev_normal", "cal_normal", "PRE_B", "BETWEEN_A", "BETWEEN_B", "BETWEEN_C"]:
@@ -163,9 +175,16 @@ def main() -> None:
     plt.close(fig)
 
     for c in cases:
-        print(c["kind"], c["sample"], c["true_label"], c["category"], c["setting"], round(c["score"], 3),
-              [(h["channel"], h["max_abs_z"]) for h in c["top_deviating_channels"]],
-              {k: v["alarm"] for k, v in c["other_model_scores_vs_threshold"].items()})
+        print(
+            c["kind"],
+            c["sample"],
+            c["true_label"],
+            c["category"],
+            c["setting"],
+            round(c["score"], 3),
+            [(h["channel"], h["max_abs_z"]) for h in c["top_deviating_channels"]],
+            {k: v["alarm"] for k, v in c["other_model_scores_vs_threshold"].items()},
+        )
     for d in drift:
         print(d)
     print(between_b_top)

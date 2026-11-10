@@ -66,7 +66,9 @@ def main() -> None:
         scores = {r: det.score(X[r]) for r in normal_roles}
         t_score = (time.perf_counter() - t0) / sum(len(v) for v in X.values())
 
-        thr = calibrate_threshold(scores["cal_normal"], cfg["threshold"]["cal_quantile"], cfg["threshold"]["quantile_method"])
+        thr = calibrate_threshold(
+            scores["cal_normal"], cfg["threshold"]["cal_quantile"], cfg["threshold"]["quantile_method"]
+        )
         tau = thr["threshold"]
         dev_alarm = float(np.mean(scores["dev_normal"] > tau))
         fit_alarm = float(np.mean(scores["fit_normal"] > tau))
@@ -128,7 +130,8 @@ def main() -> None:
                 "dev_alarm_rate_at_threshold": dev_alarm,
                 "fit_alarm_rate_at_threshold": fit_alarm,
                 "normal_score_quantiles": {
-                    r: {q: float(np.quantile(scores[r], float(q))) for q in ("0.5", "0.95", "0.99")} for r in normal_roles
+                    r: {q: float(np.quantile(scores[r], float(q))) for q in ("0.5", "0.95", "0.99")}
+                    for r in normal_roles
                 },
                 "fit_seconds": round(t_fit, 3),
                 "score_ms_per_cycle": round(t_score * 1e3, 4),

@@ -18,12 +18,15 @@ class Predictor:
         self.bundle = bundle
         self.channels: list[str] = list(bundle["channels"])
         self.threshold: float = float(bundle["threshold"]["threshold"])
+        # Two-tier alerting (v1.1+): {"warning": tau_95, "alarm": tau_99}. v1 bundles only have one level.
+        levels = bundle.get("threshold_levels") or {"warning": self.threshold}
+        self.levels: dict[str, float] = {k: float(v) for k, v in sorted(levels.items(), key=lambda kv: kv[1])}
         self.rules = ValidationRules(**bundle["input_validation"])
         self.spec = bundle["feature_spec"]
         self.top_k = int(bundle.get("deviation_top_k", 3))
 
     @classmethod
-    def from_path(cls, path: str | Path) -> "Predictor":
+    def from_path(cls, path: str | Path) -> Predictor:
         return cls(load_bundle(path))
 
     @property
@@ -53,6 +56,13 @@ class Predictor:
         hints.sort(key=lambda h: h["max_abs_z"], reverse=True)
         return hints[: self.top_k]
 
+    def alert_level(self, score: float) -> str:
+        level = "normal"
+        for name, tau in self.levels.items():  # ascending thresholds
+            if score > tau:
+                level = name
+        return level
+
     def predict_payload(self, payload: Any) -> dict:
         t0 = time.perf_counter()
         _, signals = validate_cycle(payload, self.rules)
@@ -64,6 +74,8 @@ class Predictor:
             "is_anomaly": bool(score > self.threshold),
             "anomaly_score": score,
             "threshold": self.threshold,
+            "alert_level": self.alert_level(score),
+            "alert_levels": self.levels,
             "model_version": self.model_version,
             "schema_version": self.schema_version,
             "n_points": int(signals.shape[0]),
@@ -72,5 +84,5 @@ class Predictor:
                 "Standardized deviation of channel statistics from fit_normal; "
                 "an inspection hint, not an explanation of the Isolation Forest score."
             ),
-            "timing_ms": {"features": round((t1 - t0) * 1e3, 3), "score": round((t2 - t1) * 1e3, 3)},
+            "timing_ms": {"validate_and_features": round((t1 - t0) * 1e3, 3), "score": round((t2 - t1) * 1e3, 3)},
         }

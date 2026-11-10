@@ -48,42 +48,67 @@ def main() -> None:
             a = float(batch.loc[item["sample"]])
             b = pred.predict_payload(payload)
             cli = subprocess.run(
-                [sys.executable, "-m", "robot_ad.cli", "--bundle", str(bundle_path), "predict", "--input", str(path), "--compact"],
-                capture_output=True, text=True, cwd=PROJECT_ROOT, check=True,
+                [
+                    sys.executable,
+                    "-m",
+                    "robot_ad.cli",
+                    "--bundle",
+                    str(bundle_path),
+                    "predict",
+                    "--input",
+                    str(path),
+                    "--compact",
+                ],
+                capture_output=True,
+                text=True,
+                cwd=PROJECT_ROOT,
+                check=True,
             )
             c = json.loads(cli.stdout)
             d = client.post("/predict", content=path.read_bytes(), headers={"content-type": "application/json"}).json()
             scores = [a, b["anomaly_score"], c["anomaly_score"], d["anomaly_score"]]
             decisions = [a > pred.threshold, b["is_anomaly"], c["is_anomaly"], d["is_anomaly"]]
-            rows.append({
-                "file": item["file"],
-                "sample": item["sample"],
-                "known_label_for_reference": "anomaly" if item["anomaly"] else "normal",
-                "score_batch": a, "score_reload": scores[1], "score_cli": scores[2], "score_api": scores[3],
-                "max_abs_diff": max(scores) - min(scores),
-                "decision": bool(decisions[0]),
-                "decisions_agree": len(set(decisions)) == 1,
-            })
+            rows.append(
+                {
+                    "file": item["file"],
+                    "sample": item["sample"],
+                    "known_label_for_reference": "anomaly" if item["anomaly"] else "normal",
+                    "score_batch": a,
+                    "score_reload": scores[1],
+                    "score_cli": scores[2],
+                    "score_api": scores[3],
+                    "max_abs_diff": max(scores) - min(scores),
+                    "decision": bool(decisions[0]),
+                    "decisions_agree": len(set(decisions)) == 1,
+                }
+            )
 
         invalid = []
         for f in sorted((EXAMPLES_DIR / "invalid").glob("*.json")):
             expected = f.stem
             cli = subprocess.run(
                 [sys.executable, "-m", "robot_ad.cli", "--bundle", str(bundle_path), "predict", "--input", str(f)],
-                capture_output=True, text=True, cwd=PROJECT_ROOT,
+                capture_output=True,
+                text=True,
+                cwd=PROJECT_ROOT,
             )
             r = client.post("/predict", content=f.read_bytes(), headers={"content-type": "application/json"})
             api_code = r.json().get("error", {}).get("code")
             cli_code = json.loads(cli.stderr.strip().splitlines()[-1])["error"]["code"] if cli.returncode == 2 else None
-            invalid.append({
-                "case": expected,
-                "cli_exit_code": cli.returncode,
-                "cli_error_code": cli_code,
-                "api_status": r.status_code,
-                "api_error_code": api_code,
-                "api_message": r.json().get("error", {}).get("message"),
-                "pass": cli.returncode == 2 and cli_code == expected and r.status_code == 422 and api_code == expected,
-            })
+            invalid.append(
+                {
+                    "case": expected,
+                    "cli_exit_code": cli.returncode,
+                    "cli_error_code": cli_code,
+                    "api_status": r.status_code,
+                    "api_error_code": api_code,
+                    "api_message": r.json().get("error", {}).get("message"),
+                    "pass": cli.returncode == 2
+                    and cli_code == expected
+                    and r.status_code == 422
+                    and api_code == expected,
+                }
+            )
 
     max_diff = max(r["max_abs_diff"] for r in rows)
     out = {
@@ -103,7 +128,9 @@ def main() -> None:
         json.dump(out, fh, indent=2)
     print(f"examples={len(rows)} max_abs_diff={max_diff:.3e} consistency_pass={out['consistency_pass']}")
     for i in invalid:
-        print(f"  {i['case']:28s} cli_exit={i['cli_exit_code']} api={i['api_status']} {i['api_error_code']} pass={i['pass']}")
+        print(
+            f"  {i['case']:28s} cli_exit={i['cli_exit_code']} api={i['api_status']} {i['api_error_code']} pass={i['pass']}"
+        )
     print("health", health.status_code, health.json()["model_version"])
 
 

@@ -22,7 +22,15 @@ import pandas as pd
 from sklearn.metrics import precision_recall_curve, roc_curve
 
 from robot_ad.bundle import dependency_versions, git_commit, load_bundle, now_utc
-from robot_ad.config import DEFAULT_CONFIG, FIGURES_DIR, MODELS_DIR, NORMAL_SETTING_NAMES, PROCESSED_DIR, REPORTS_DIR, load_config
+from robot_ad.config import (
+    DEFAULT_CONFIG,
+    FIGURES_DIR,
+    MODELS_DIR,
+    NORMAL_SETTING_NAMES,
+    PROCESSED_DIR,
+    REPORTS_DIR,
+    load_config,
+)
 from robot_ad.data import sha256_bytes
 from robot_ad.metrics import operating_point, per_group_recall, ranking
 
@@ -35,7 +43,9 @@ def main() -> None:
     y = test["anomaly"].to_numpy().astype(int)
     cat = test["category_name"].to_numpy()
     setting = np.array([NORMAL_SETTING_NAMES.get(int(s), "anomaly_setting") for s in test["setting"]])
-    feature_ms = json.loads((REPORTS_DIR / "feature_spec.json").read_text(encoding="utf-8"))["timing"]["feature_ms_per_cycle"]
+    feature_ms = json.loads((REPORTS_DIR / "feature_spec.json").read_text(encoding="utf-8"))["timing"][
+        "feature_ms_per_cycle"
+    ]
 
     manifest_sha = sha256_bytes((REPORTS_DIR / "split_manifest.csv").read_bytes())
     config_sha = sha256_bytes(DEFAULT_CONFIG.read_bytes())
@@ -77,7 +87,12 @@ def main() -> None:
         "evaluation_git_commit": git_commit(),
         "protocol": "docs/validation_protocol.md",
         "positive_class": "anomaly",
-        "test_counts": {"n": int(len(y)), "n_anomaly": int(y.sum()), "n_normal": int((1 - y).sum()), "anomaly_rate": float(y.mean())},
+        "test_counts": {
+            "n": int(len(y)),
+            "n_anomaly": int(y.sum()),
+            "n_normal": int((1 - y).sum()),
+            "anomaly_rate": float(y.mean()),
+        },
         "environment": {
             "platform": platform.platform(),
             "processor": platform.processor(),
@@ -94,7 +109,9 @@ def main() -> None:
     print(f"{'model_version':40s} {'recall':>7s} {'fpr':>6s} {'prec':>6s} {'auc':>6s} {'ap':>6s}")
     for r in results:
         op, rk = r["operating_point"], r["ranking"]
-        print(f"{r['model_version']:40s} {op['recall']:7.3f} {op['fpr']:6.3f} {op['precision']:6.3f} {rk['roc_auc']:6.3f} {rk['average_precision']:6.3f}")
+        print(
+            f"{r['model_version']:40s} {op['recall']:7.3f} {op['fpr']:6.3f} {op['precision']:6.3f} {rk['roc_auc']:6.3f} {rk['average_precision']:6.3f}"
+        )
 
     _figures(results, scores_out, y)
 
@@ -111,7 +128,15 @@ def _figures(results: list[dict], scores: pd.DataFrame, y: np.ndarray) -> None:
     ax.imshow(m, cmap="Blues")
     for i in range(2):
         for j in range(2):
-            ax.text(j, i, str(m[i, j]), ha="center", va="center", fontsize=14, color="white" if m[i, j] > m.max() / 2 else "black")
+            ax.text(
+                j,
+                i,
+                str(m[i, j]),
+                ha="center",
+                va="center",
+                fontsize=14,
+                color="white" if m[i, j] > m.max() / 2 else "black",
+            )
     ax.set_xticks([0, 1], ["pred normal", "pred anomaly"])
     ax.set_yticks([0, 1], ["true normal", "true anomaly"])
     ax.set_title(f"{pv}\nfrozen threshold, test set")

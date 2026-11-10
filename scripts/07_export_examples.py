@@ -44,20 +44,42 @@ def main() -> None:
         payload = cycle_to_payload(g["time"].to_numpy(), g[channels].to_numpy(), channels, cfg["schema_version"])
         (EXAMPLES_DIR / f"{name}.json").write_text(json.dumps(payload), encoding="utf-8")
         row = man.loc[sid]
-        index.append({"file": f"{name}.json", "sample": int(sid), "anomaly": bool(row["anomaly"]),
-                      "category": row["category_name"], "setting": int(row["setting"])})
+        index.append(
+            {
+                "file": f"{name}.json",
+                "sample": int(sid),
+                "anomaly": bool(row["anomaly"]),
+                "category": row["category_name"],
+                "setting": int(row["setting"]),
+            }
+        )
     (EXAMPLES_DIR / "index.json").write_text(json.dumps(index, indent=2), encoding="utf-8")
 
     # invalid payloads built from the first normal example
     base = json.loads((EXAMPLES_DIR / index[0]["file"]).read_text(encoding="utf-8"))
     bad = {}
-    p = copy.deepcopy(base); del p["signals"]["motor_iq_3"]; bad["missing_channel"] = p
-    p = copy.deepcopy(base); p["signals"]["torque_sensor_a_2"] = p["signals"]["torque_sensor_a_2"][:-5]; bad["length_mismatch"] = p
-    p = copy.deepcopy(base); p["signals"]["joint_velocity_1"][100] = float("nan"); bad["non_finite"] = p
-    p = copy.deepcopy(base); p["time_s"][200], p["time_s"][201] = p["time_s"][201], p["time_s"][200]; bad["time_not_increasing"] = p
-    p = copy.deepcopy(base); p["schema_version"] = "robot-cycle-v0"; bad["unknown_schema_version"] = p
-    p = copy.deepcopy(base); p["signals"]["robot_voltage"] = p["signals"]["motor_iq_1"]; bad["unexpected_channel"] = p
-    p = copy.deepcopy(base); p["time_s"] = p["time_s"][:500]; p["signals"] = {k: v[:500] for k, v in p["signals"].items()}; bad["length_out_of_range"] = p
+    p = copy.deepcopy(base)
+    del p["signals"]["motor_iq_3"]
+    bad["missing_channel"] = p
+    p = copy.deepcopy(base)
+    p["signals"]["torque_sensor_a_2"] = p["signals"]["torque_sensor_a_2"][:-5]
+    bad["length_mismatch"] = p
+    p = copy.deepcopy(base)
+    p["signals"]["joint_velocity_1"][100] = float("nan")
+    bad["non_finite"] = p
+    p = copy.deepcopy(base)
+    p["time_s"][200], p["time_s"][201] = p["time_s"][201], p["time_s"][200]
+    bad["time_not_increasing"] = p
+    p = copy.deepcopy(base)
+    p["schema_version"] = "robot-cycle-v0"
+    bad["unknown_schema_version"] = p
+    p = copy.deepcopy(base)
+    p["signals"]["robot_voltage"] = p["signals"]["motor_iq_1"]
+    bad["unexpected_channel"] = p
+    p = copy.deepcopy(base)
+    p["time_s"] = p["time_s"][:500]
+    p["signals"] = {k: v[:500] for k, v in p["signals"].items()}
+    bad["length_out_of_range"] = p
     for k, v in bad.items():
         (EXAMPLES_DIR / "invalid" / f"{k}.json").write_text(json.dumps(v), encoding="utf-8")  # NaN written as NaN token
 

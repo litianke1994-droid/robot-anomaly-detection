@@ -21,7 +21,7 @@ import streamlit as st
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from robot_ad.config import PROCESSED_DIR, MODELS_DIR, NORMAL_SETTING_NAMES  # noqa: E402
+from robot_ad.config import MODELS_DIR, NORMAL_SETTING_NAMES, PROCESSED_DIR  # noqa: E402
 from robot_ad.predict import Predictor  # noqa: E402
 from robot_ad.schema import InputError, cycle_to_payload  # noqa: E402
 
@@ -78,8 +78,12 @@ except InputError as e:
 
 c1, c2, c3 = st.columns(3)
 c1.metric("Model decision", "ANOMALY" if res["is_anomaly"] else "normal")
-c2.metric("Anomaly score", f"{res['anomaly_score']:.4f}", delta=f"{res['anomaly_score'] - res['threshold']:+.4f} vs threshold",
-          delta_color="inverse")
+c2.metric(
+    "Anomaly score",
+    f"{res['anomaly_score']:.4f}",
+    delta=f"{res['anomaly_score'] - res['threshold']:+.4f} vs threshold",
+    delta_color="inverse",
+)
 c3.metric("Points / duration", f"{res['n_points']} / {cyc['time'].iloc[-1]:.2f} s")
 
 with st.expander("Known experimental label (reference only, not used by the model)", expanded=True):
@@ -87,8 +91,10 @@ with st.expander("Known experimental label (reference only, not used by the mode
     truth = "anomaly" if row["anomaly"] else "normal"
     setting = NORMAL_SETTING_NAMES.get(int(row["setting"]), "anomaly experiment")
     agree = (truth == "anomaly") == res["is_anomaly"]
-    st.write(f"Label: **{truth}** · category `{row['category_name']}` · setting `{setting}` · "
-             f"model {'agrees' if agree else '**disagrees**'}")
+    st.write(
+        f"Label: **{truth}** · category `{row['category_name']}` · setting `{setting}` · "
+        f"model {'agrees' if agree else '**disagrees**'}"
+    )
 
 st.subheader("Reference deviation hints")
 st.caption(res["reference_deviations_note"])

@@ -22,7 +22,9 @@ DEFAULT_BUNDLE = os.environ.get("ROBOT_AD_BUNDLE", str(MODELS_DIR / "iforest__fu
 
 
 def main(argv: list[str] | None = None) -> int:
-    ap = argparse.ArgumentParser(prog="robot-ad", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap = argparse.ArgumentParser(
+        prog="robot-ad", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     ap.add_argument("--bundle", default=DEFAULT_BUNDLE, help="path to a model bundle (.joblib)")
     sub = ap.add_subparsers(dest="cmd", required=True)
     p = sub.add_parser("predict", help="score one cycle JSON file")
@@ -34,13 +36,18 @@ def main(argv: list[str] | None = None) -> int:
     predictor = Predictor.from_path(args.bundle)
     if args.cmd == "info":
         b = predictor.bundle
-        print(json.dumps({
-            "model_version": b["model_version"],
-            "schema_version": b["schema_version"],
-            "threshold": b["threshold"],
-            "input_validation": b["input_validation"],
-            "git_commit": b["git_commit"],
-        }, indent=2))
+        print(
+            json.dumps(
+                {
+                    "model_version": b["model_version"],
+                    "schema_version": b["schema_version"],
+                    "threshold": b["threshold"],
+                    "input_validation": b["input_validation"],
+                    "git_commit": b["git_commit"],
+                },
+                indent=2,
+            )
+        )
         return 0
 
     try:

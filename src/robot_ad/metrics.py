@@ -30,7 +30,14 @@ def operating_point(y: np.ndarray, scores: np.ndarray, threshold: float) -> dict
     f1 = None
     if precision is not None and recall is not None and (precision + recall) > 0:
         f1 = 2 * precision * recall / (precision + recall)
-    return {"threshold": float(threshold), "confusion": c, "recall": recall, "fpr": fpr, "precision": precision, "f1": f1}
+    return {
+        "threshold": float(threshold),
+        "confusion": c,
+        "recall": recall,
+        "fpr": fpr,
+        "precision": precision,
+        "f1": f1,
+    }
 
 
 def ranking(y: np.ndarray, scores: np.ndarray) -> dict:
@@ -55,7 +62,9 @@ def per_group_recall(groups: np.ndarray, y: np.ndarray, scores: np.ndarray, thre
         m = groups == g
         if y[m].all():
             tp, fn = int(np.sum(pred[m])), int(np.sum(~pred[m]))
-            rows.append({"group": g, "kind": "anomaly", "n": int(m.sum()), "TP": tp, "FN": fn, "recall": tp / (tp + fn)})
+            rows.append(
+                {"group": g, "kind": "anomaly", "n": int(m.sum()), "TP": tp, "FN": fn, "recall": tp / (tp + fn)}
+            )
         elif (~y[m]).all():
             fp, tn = int(np.sum(pred[m])), int(np.sum(~pred[m]))
             rows.append({"group": g, "kind": "normal", "n": int(m.sum()), "FP": fp, "TN": tn, "fpr": fp / (fp + tn)})

@@ -4,13 +4,31 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "robot-ad"
-version = "1.0.0"
+version = "1.1.0"
 description = "Cycle-level anomaly detection for a pick-and-place robot (voraus-AD, 100 Hz)"
 requires-python = ">=3.11"
 license = {text = "MIT"}
+dependencies = ["numpy", "scipy", "scikit-learn", "joblib"]
+
+[project.optional-dependencies]
+pipeline = ["pandas", "pyarrow", "matplotlib"]
+serve = ["fastapi", "pydantic", "uvicorn"]
+app = ["streamlit", "matplotlib", "pandas", "pyarrow"]
+dev = ["pytest", "httpx", "ruff"]
+
+[project.scripts]
+robot-ad = "robot_ad.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B", "UP", "SIM", "I"]
+ignore = ["B008", "B905", "E501"]  # Body() default is idiomatic FastAPI; zip lengths checked explicitly; line length left to ruff format

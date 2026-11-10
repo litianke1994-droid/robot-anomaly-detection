@@ -5,7 +5,7 @@ from __future__ import annotations
 import json
 import platform
 import subprocess
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from importlib import metadata
 from pathlib import Path
 
@@ -23,7 +23,10 @@ def git_commit() -> str:
         ).stdout.strip()
         dirty = subprocess.run(
             ["git", "status", "--porcelain", "--untracked-files=no"],
-            cwd=PROJECT_ROOT, capture_output=True, text=True, check=True,
+            cwd=PROJECT_ROOT,
+            capture_output=True,
+            text=True,
+            check=True,
         ).stdout.strip()
         return out + ("-dirty" if dirty else "")
     except Exception:
@@ -41,7 +44,7 @@ def dependency_versions() -> dict:
 
 
 def now_utc() -> str:
-    return datetime.now(timezone.utc).isoformat(timespec="seconds")
+    return datetime.now(UTC).isoformat(timespec="seconds")
 
 
 def save_bundle(bundle: dict, path: str | Path) -> None:

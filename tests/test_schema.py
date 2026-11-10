@@ -65,6 +65,19 @@ def test_sampling_interval(valid_payload, rules):
     assert _err(p, rules) == "sampling_interval_out_of_range"
 
 
+@pytest.mark.parametrize("bad_value", ["1.5", True, None])
+def test_rejects_strings_bools_null(valid_payload, rules, bad_value):
+    p = copy.deepcopy(valid_payload)
+    p["signals"]["motor_iq_3"][0] = bad_value
+    assert _err(p, rules) == "invalid_type"
+
+
+def test_rejects_all_string_numbers(valid_payload, rules):
+    p = copy.deepcopy(valid_payload)
+    p["signals"]["motor_iq_3"] = [str(v) for v in p["signals"]["motor_iq_3"]]
+    assert _err(p, rules) == "invalid_type"
+
+
 def test_non_numeric(valid_payload, rules):
     p = copy.deepcopy(valid_payload)
     p["signals"]["motor_iq_3"] = ["a"] * len(p["time_s"])

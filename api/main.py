@@ -14,7 +14,8 @@ import time
 from contextlib import asynccontextmanager
 from typing import Any
 
-from fastapi import Body, FastAPI
+from fastapi import Body, FastAPI, Request
+from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
 from robot_ad.config import MODELS_DIR
@@ -35,7 +36,17 @@ async def lifespan(_: FastAPI):
     yield
 
 
-app = FastAPI(title="Robot cycle anomaly detection", version="1.0.0", lifespan=lifespan)
+app = FastAPI(title="Robot cycle anomaly detection", version="1.1.0", lifespan=lifespan)
+
+
+@app.exception_handler(RequestValidationError)
+async def _invalid_body(_: Request, exc: RequestValidationError) -> JSONResponse:
+    # Same error shape as every other rejection: {"error": {"code", "message"}}
+    first = exc.errors()[0] if exc.errors() else {}
+    code = "invalid_json" if first.get("type") == "json_invalid" else "invalid_request"
+    return JSONResponse(
+        status_code=422, content={"error": {"code": code, "message": str(first.get("msg", "invalid request"))}}
+    )
 
 
 def get_predictor() -> Predictor | None:
@@ -54,21 +65,26 @@ def health() -> JSONResponse:
     p = get_predictor()
     if p is None:
         return JSONResponse(status_code=503, content={"status": "not_ready", "error": _state["load_error"]})
-    return JSONResponse(content={
-        "status": "ok",
-        "model_ready": True,
-        "model_version": p.model_version,
-        "schema_version": p.schema_version,
-        "threshold": p.threshold,
-        "channels": p.channels,
-    })
+    return JSONResponse(
+        content={
+            "status": "ok",
+            "model_ready": True,
+            "model_version": p.model_version,
+            "schema_version": p.schema_version,
+            "threshold": p.threshold,
+            "alert_levels": p.levels,
+            "channels": p.channels,
+        }
+    )
 
 
 @app.post("/predict")
 def predict(payload: Any = Body(...)) -> JSONResponse:
     p = get_predictor()
     if p is None:
-        return JSONResponse(status_code=503, content={"error": {"code": "model_not_ready", "message": _state["load_error"]}})
+        return JSONResponse(
+            status_code=503, content={"error": {"code": "model_not_ready", "message": _state["load_error"]}}
+        )
     t0 = time.perf_counter()
     try:
         result = p.predict_payload(payload)
@@ -77,7 +93,10 @@ def predict(payload: Any = Body(...)) -> JSONResponse:
         return JSONResponse(status_code=422, content={"error": e.to_dict()})
     log.info(
         "predict ok model_version=%s n_points=%d score=%.6f is_anomaly=%s elapsed_ms=%.2f",
-        result["model_version"], result["n_points"], result["anomaly_score"], result["is_anomaly"],
+        result["model_version"],
+        result["n_points"],
+        result["anomaly_score"],
+        result["is_anomaly"],
         (time.perf_counter() - t0) * 1e3,
     )
     return JSONResponse(content=result)

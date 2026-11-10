@@ -24,7 +24,7 @@ class ZScoreMax:
     def __init__(self, constant_std_eps: float = 1e-12):
         self.constant_std_eps = constant_std_eps
 
-    def fit(self, X: np.ndarray, feature_names: list[str] | None = None) -> "ZScoreMax":
+    def fit(self, X: np.ndarray, feature_names: list[str] | None = None) -> ZScoreMax:
         self.mean_ = X.mean(axis=0)
         self.std_ = X.std(axis=0, ddof=0)
         self.active_ = self.std_ > self.constant_std_eps
@@ -57,7 +57,7 @@ class PCARecon:
         self.variance = variance
         self.svd_solver = svd_solver
 
-    def fit(self, X: np.ndarray, feature_names: list[str] | None = None) -> "PCARecon":
+    def fit(self, X: np.ndarray, feature_names: list[str] | None = None) -> PCARecon:
         self.scaler_ = StandardScaler().fit(X)
         self.pca_ = PCA(n_components=self.variance, svd_solver=self.svd_solver).fit(self.scaler_.transform(X))
         return self
@@ -91,7 +91,7 @@ class IForest:
         self.max_features = max_features
         self.random_state = random_state
 
-    def fit(self, X: np.ndarray, feature_names: list[str] | None = None) -> "IForest":
+    def fit(self, X: np.ndarray, feature_names: list[str] | None = None) -> IForest:
         self.model_ = IsolationForest(
             n_estimators=self.n_estimators,
             max_samples=self.max_samples,
@@ -113,15 +113,185 @@ class IForest:
         }
 
 
-def make_detector(name: str, cfg_models: dict):
-    kwargs = dict(cfg_models.get(name, {}))
-    if name == "zscore_max":
-        return ZScoreMax(**kwargs)
-    if name == "pca_recon":
-        return PCARecon(**kwargs)
-    if name == "iforest":
-        return IForest(**kwargs)
-    raise ValueError(f"unknown detector {name!r}")
+class _Scaled:
+    """Base for detectors that work on StandardScaler-transformed features (scaler fitted on normal data)."""
+
+    def _fit_scaler(self, X: np.ndarray) -> np.ndarray:
+        self.scaler_ = StandardScaler().fit(X)
+        return self.scaler_.transform(X)
+
+
+class Mahalanobis(_Scaled):
+    """Squared Mahalanobis distance with a Ledoit-Wolf shrunk covariance of normal features."""
+
+    name = "mahalanobis"
+
+    def fit(self, X, feature_names=None):
+        from sklearn.covariance import LedoitWolf
+
+        self.cov_ = LedoitWolf().fit(self._fit_scaler(X))
+        return self
+
+    def score(self, X):
+        return self.cov_.mahalanobis(self.scaler_.transform(X))
+
+    def params(self):
+        return {"covariance": "LedoitWolf", "shrinkage": float(self.cov_.shrinkage_)}
+
+
+class KNNDistance(_Scaled):
+    """Mean Euclidean distance to the k nearest normal training cycles (standardized space)."""
+
+    name = "knn"
+
+    def __init__(self, k: int = 5):
+        self.k = k
+
+    def fit(self, X, feature_names=None):
+        from sklearn.neighbors import NearestNeighbors
+
+        self.nn_ = NearestNeighbors(n_neighbors=self.k).fit(self._fit_scaler(X))
+        return self
+
+    def score(self, X):
+        d, _ = self.nn_.kneighbors(self.scaler_.transform(X))
+        return d.mean(axis=1)
+
+    def params(self):
+        return {"k": self.k}
+
+
+class LOF(_Scaled):
+    """Local Outlier Factor in novelty mode; score = -score_samples."""
+
+    name = "lof"
+
+    def __init__(self, n_neighbors: int = 20):
+        self.n_neighbors = n_neighbors
+
+    def fit(self, X, feature_names=None):
+        from sklearn.neighbors import LocalOutlierFactor
+
+        self.model_ = LocalOutlierFactor(n_neighbors=self.n_neighbors, novelty=True).fit(self._fit_scaler(X))
+        return self
+
+    def score(self, X):
+        return -self.model_.score_samples(self.scaler_.transform(X))
+
+    def params(self):
+        return {"n_neighbors": self.n_neighbors}
+
+
+class OCSVM(_Scaled):
+    """One-class SVM with RBF kernel; score = -decision_function."""
+
+    name = "ocsvm"
+
+    def __init__(self, nu: float = 0.05, gamma: str | float = "scale"):
+        self.nu = nu
+        self.gamma = gamma
+
+    def fit(self, X, feature_names=None):
+        from sklearn.svm import OneClassSVM
+
+        self.model_ = OneClassSVM(nu=self.nu, gamma=self.gamma).fit(self._fit_scaler(X))
+        return self
+
+    def score(self, X):
+        return -self.model_.decision_function(self.scaler_.transform(X))
+
+    def params(self):
+        return {"nu": self.nu, "gamma": self.gamma}
+
+
+class ECOD:
+    """Empirical-CDF outlier score (ECOD idea, Li et al. 2022), implemented with numpy.
+
+    For each feature, left and right tail probabilities of a value are estimated from
+    the normal training distribution; the score sums -log tail probabilities, taking
+    for each feature the tail indicated by the training skewness (plus the max of
+    left/right/skew-corrected aggregates, as in the original method).
+    """
+
+    name = "ecod"
+
+    def fit(self, X, feature_names=None):
+        self.sorted_ = np.sort(X, axis=0)
+        n = X.shape[0]
+        self.n_ = n
+        from scipy.stats import skew
+
+        self.skew_sign_ = np.sign(skew(X, axis=0))
+        return self
+
+    def _tails(self, X):
+        n = self.n_
+        left = np.empty_like(X, dtype=np.float64)
+        right = np.empty_like(X, dtype=np.float64)
+        for j in range(X.shape[1]):
+            col = self.sorted_[:, j]
+            left[:, j] = np.searchsorted(col, X[:, j], side="right") / (n + 1)
+            right[:, j] = (n - np.searchsorted(col, X[:, j], side="left")) / (n + 1)
+        eps = 1.0 / (n + 1)
+        return -np.log(np.clip(left, eps, 1)), -np.log(np.clip(right, eps, 1))
+
+    def score(self, X):
+        ul, ur = self._tails(np.asarray(X, dtype=np.float64))
+        uskew = np.where(self.skew_sign_ < 0, ul, ur)
+        return np.maximum.reduce([ul.sum(axis=1), ur.sum(axis=1), uskew.sum(axis=1)])
+
+    def params(self):
+        return {"n_train": int(self.n_)}
+
+
+class Combo:
+    """Mean of member scores, each normalized as (s - median) / (q95 - median) of its normal training scores."""
+
+    name = "combo"
+
+    def __init__(self, members: list, member_names: list[str]):
+        self.members = members
+        self.member_names = member_names
+
+    def fit(self, X, feature_names=None):
+        self.norm_ = []
+        for m in self.members:
+            m.fit(X, feature_names)
+            s = m.score(X)
+            med, q95 = np.median(s), np.quantile(s, 0.95)
+            self.norm_.append((float(med), float(max(q95 - med, 1e-12))))
+        return self
+
+    def score(self, X):
+        parts = [(m.score(X) - med) / scale for m, (med, scale) in zip(self.members, self.norm_)]
+        return np.mean(parts, axis=0)
+
+    def params(self):
+        return {"members": self.member_names, "normalization": "(s - median_fit) / (q95_fit - median_fit)"}
+
+
+DETECTORS = {
+    "zscore_max": ZScoreMax,
+    "pca_recon": PCARecon,
+    "iforest": IForest,
+    "mahalanobis": Mahalanobis,
+    "knn": KNNDistance,
+    "lof": LOF,
+    "ocsvm": OCSVM,
+    "ecod": ECOD,
+}
+
+
+def make_detector(name: str, cfg_models: dict | None = None, **overrides):
+    """Build a detector. `name` may be 'combo:a+b' to average normalized member scores."""
+    cfg_models = cfg_models or {}
+    if name.startswith("combo:"):
+        member_names = name.split(":", 1)[1].split("+")
+        return Combo([make_detector(m, cfg_models) for m in member_names], member_names)
+    if name not in DETECTORS:
+        raise ValueError(f"unknown detector {name!r}")
+    kwargs = {**cfg_models.get(name, {}), **overrides}
+    return DETECTORS[name](**kwargs)
 
 
 def calibrate_threshold(cal_scores: np.ndarray, quantile: float = 0.95, method: str = "linear") -> dict:

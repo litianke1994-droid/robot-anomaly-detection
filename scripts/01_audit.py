@@ -16,7 +16,6 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 
 from robot_ad.config import CATEGORY_NAMES, FIGURES_DIR, NORMAL_SETTING_NAMES, REPORTS_DIR, load_config, raw_path
 from robot_ad.data import META_COLUMNS, cycle_boundaries, cycle_metadata, read_columns, sha256_file
@@ -46,9 +45,7 @@ def main() -> None:
     # --- structural checks -------------------------------------------------
     ids, bounds = cycle_boundaries(df["sample"].to_numpy())
     meta = cycle_metadata(df)
-    label_consistent = bool(
-        (meta[["n_anomaly_values", "n_category_values", "n_setting_values"]] == 1).all().all()
-    )
+    label_consistent = bool((meta[["n_anomaly_values", "n_category_values", "n_setting_values"]] == 1).all().all())
     normal_cat_consistent = bool(((meta["category"] == 12) == (~meta["anomaly"])).all())
 
     dt = df.groupby("sample")["time"].diff().dropna()
@@ -78,9 +75,7 @@ def main() -> None:
         "test_normal": int((~is_train & ~meta["anomaly"]).sum()),
         "test_anomaly": int((~is_train & meta["anomaly"]).sum()),
     }
-    per_category = {
-        CATEGORY_NAMES[int(k)]: int(v) for k, v in meta[~is_train].groupby("category").size().items()
-    }
+    per_category = {CATEGORY_NAMES[int(k)]: int(v) for k, v in meta[~is_train].groupby("category").size().items()}
     normal_settings = {
         NORMAL_SETTING_NAMES.get(int(k), str(k)): int(v)
         for k, v in meta[~meta["anomaly"]].groupby("setting").size().items()
@@ -168,7 +163,11 @@ def main() -> None:
     s = int(meta.index[is_train][0])
     cyc = df[df["sample"] == s]
     fig, axes = plt.subplots(3, 1, figsize=(10, 8), sharex=True)
-    groups = [("motor_iq", "q-axis current [A]"), ("joint_velocity", "joint velocity [rad/s]"), ("torque_sensor_a", "torque sensor A [N·m]")]
+    groups = [
+        ("motor_iq", "q-axis current [A]"),
+        ("joint_velocity", "joint velocity [rad/s]"),
+        ("torque_sensor_a", "torque sensor A [N·m]"),
+    ]
     for ax, (prefix, label) in zip(axes, groups):
         for i in range(1, 7):
             ax.plot(cyc["time"], cyc[f"{prefix}_{i}"], lw=0.9, label=f"axis {i}")

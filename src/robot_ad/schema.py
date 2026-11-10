@@ -13,8 +13,9 @@ The same function is used by the CLI, the API and the replay page.
 from __future__ import annotations
 
 import math
+from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Any, Sequence
+from typing import Any
 
 import numpy as np
 
@@ -39,7 +40,7 @@ class ValidationRules:
     dt_max_s: float
 
     @classmethod
-    def from_config(cls, cfg: dict, channels: Sequence[str]) -> "ValidationRules":
+    def from_config(cls, cfg: dict, channels: Sequence[str]) -> ValidationRules:
         v = cfg["input_validation"]
         return cls(
             schema_version=cfg["schema_version"],
@@ -65,12 +66,17 @@ def _as_float_array(values: Any, name: str) -> np.ndarray:
     if not isinstance(values, (list, tuple, np.ndarray)):
         raise InputError("invalid_type", f"{name} must be a list of numbers")
     try:
-        arr = np.asarray(values, dtype=np.float64)
-    except (TypeError, ValueError):
-        raise InputError("invalid_type", f"{name} must contain only numbers") from None
-    if arr.ndim != 1:
-        raise InputError("invalid_type", f"{name} must be a flat list")
-    return arr
+        raw = np.asarray(values)
+    except ValueError:  # ragged nested lists
+        raise InputError("invalid_type", f"{name} must be a flat list of numbers") from None
+    if raw.ndim != 1:
+        raise InputError("invalid_type", f"{name} must be a flat list of numbers")
+    # Only JSON numbers: reject strings ("1.5"), booleans and nulls instead of silently coercing them.
+    # numpy turns [0.1, True] into floats, so booleans inside a list need an explicit check.
+    has_bool = isinstance(values, (list, tuple)) and any(isinstance(v, bool) for v in values)
+    if (raw.size and raw.dtype.kind not in "iuf") or has_bool:
+        raise InputError("invalid_type", f"{name} must contain only numbers (no strings, booleans or null)")
+    return raw.astype(np.float64, copy=False)
 
 
 def validate_cycle(payload: Any, rules: ValidationRules) -> tuple[np.ndarray, np.ndarray]:
@@ -97,7 +103,7 @@ def validate_cycle(payload: Any, rules: ValidationRules) -> tuple[np.ndarray, np
 
     t = _as_float_array(payload["time_s"], "time_s")
     T = t.size
-    if T < rules.min_length or T > rules.max_length:
+    if rules.min_length > T or rules.max_length < T:
         raise InputError(
             "length_out_of_range", f"cycle length {T} outside supported range [{rules.min_length}, {rules.max_length}]"
         )
@@ -130,6 +136,7 @@ def validate_cycle(payload: Any, rules: ValidationRules) -> tuple[np.ndarray, np
 
 def cycle_to_payload(time_s: np.ndarray, signals: np.ndarray, channels: Sequence[str], schema_version: str) -> dict:
     """Build a payload from arrays (used to export examples)."""
+
     def clean(a):
         return [float(v) if math.isfinite(v) else v for v in np.asarray(a, dtype=np.float64)]
 

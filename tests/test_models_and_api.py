@@ -17,7 +17,10 @@ def test_threshold_rule():
     assert thr["rule"] == "score > threshold"
 
 
-@pytest.mark.parametrize("name", ["zscore_max", "pca_recon", "iforest"])
+@pytest.mark.parametrize(
+    "name",
+    ["zscore_max", "pca_recon", "iforest", "mahalanobis", "knn", "lof", "ocsvm", "ecod", "combo:zscore_max+pca_recon"],
+)
 def test_score_direction(name):
     rng = np.random.default_rng(0)
     X = rng.standard_normal((300, 10))
@@ -50,8 +53,12 @@ def test_reload_is_deterministic(bundle_path, valid_payload):
 def test_cli(bundle_path, valid_payload, tmp_path):
     f = tmp_path / "cycle.json"
     f.write_text(json.dumps(valid_payload), encoding="utf-8")
-    out = subprocess.run([sys.executable, "-m", "robot_ad.cli", "--bundle", str(bundle_path), "predict", "--input", str(f)],
-                         capture_output=True, text=True, check=True)
+    out = subprocess.run(
+        [sys.executable, "-m", "robot_ad.cli", "--bundle", str(bundle_path), "predict", "--input", str(f)],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
     res = json.loads(out.stdout)
     ref = Predictor.from_path(bundle_path).predict_payload(valid_payload)
     assert abs(res["anomaly_score"] - ref["anomaly_score"]) <= 1e-6
@@ -72,6 +79,14 @@ def test_api(bundle_path, valid_payload, monkeypatch):
         bad = dict(valid_payload, schema_version="x")
         r = client.post("/predict", json=bad)
         assert r.status_code == 422 and r.json()["error"]["code"] == "unknown_schema_version"
+        r = client.post("/predict", content=b"{not json", headers={"content-type": "application/json"})
+        assert r.status_code == 422 and r.json()["error"]["code"] == "invalid_json"
+
+
+def test_alert_levels(bundle_path):
+    p = Predictor.from_path(bundle_path)
+    p.levels = {"warning": 1.0, "alarm": 2.0}
+    assert [p.alert_level(s) for s in (0.5, 1.5, 2.5)] == ["normal", "warning", "alarm"]
 
 
 def test_api_not_ready(monkeypatch, tmp_path):
