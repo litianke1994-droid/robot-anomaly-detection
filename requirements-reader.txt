@@ -1,3 +1,4 @@
+# Historical (2026-10-18). Superseded by requirements.txt: pyarrow is now pinned to 24.0.0.
 # Tested Parquet reader for this project on Windows / Python 3.12.
 # The current project .venv reuses pandas and numpy from the base Python.
 pyarrow==25.0.0

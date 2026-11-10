@@ -1,0 +1,17 @@
+.venv
+.venv-1
+.git
+.claude
+data
+reports
+docs
+tests
+app
+scripts
+*.pdf
+**/__pycache__
+*.egg-info
+.pytest_cache
+models/*
+!models/iforest__full_18.joblib
+!models/iforest__full_18.json

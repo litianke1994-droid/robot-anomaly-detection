@@ -1,0 +1,10 @@
+# Minimal runtime for the API container (no training, no plotting).
+# joblib-loaded scikit-learn objects need the same numpy / scikit-learn
+# versions that fitted them.
+numpy==2.5.0
+scipy==1.18.0
+scikit-learn==1.9.0
+joblib==1.5.3
+fastapi==0.162.2
+pydantic==2.14.3
+uvicorn==0.54.0

@@ -54,3 +54,9 @@ VS Code 运行按钮需要选择本项目 `.venv/Scripts/python.exe` 作为解�
 
 - https://pypi.org/project/pyarrow/25.0.0/
 - https://learn.microsoft.com/en-us/windows/security/application-security/application-control/app-control-for-business/operations/appcontrol-debugging-and-troubleshooting
+
+## 补充（2026-11-10）
+
+安装 streamlit 时 pip 把 `.venv` 中的 pyarrow 升级到 26.0.1，再次触发智能应用控制拦截（`pyarrow._compute` DLL 加载失败）。
+streamlit 1.67.0 明确排除 pyarrow 25.0.0，因此先在临时目录验证 pyarrow 24.0.0 能正常加载并读取本数据集，再在 `.venv` 中固定为 24.0.0；`pip check` 无冲突。
+完整依赖改记于 `requirements.txt`；`requirements-reader.txt` 仅保留为历史记录。

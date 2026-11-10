@@ -1,0 +1,91 @@
+{
+  "ports": [
+    64923,
+    64924
+  ],
+  "startup_seconds": 1.69,
+  "health": {
+    "status": 200,
+    "body": {
+      "status": "ok",
+      "model_ready": true,
+      "model_version": "robot-ad-1.0.0-iforest-full_18",
+      "schema_version": "robot-cycle-v1",
+      "threshold": 0.47696847060668035,
+      "channels": [
+        "motor_iq_1",
+        "motor_iq_2",
+        "motor_iq_3",
+        "motor_iq_4",
+        "motor_iq_5",
+        "motor_iq_6",
+        "joint_velocity_1",
+        "joint_velocity_2",
+        "joint_velocity_3",
+        "joint_velocity_4",
+        "joint_velocity_5",
+        "joint_velocity_6",
+        "torque_sensor_a_1",
+        "torque_sensor_a_2",
+        "torque_sensor_a_3",
+        "torque_sensor_a_4",
+        "torque_sensor_a_5",
+        "torque_sensor_a_6"
+      ]
+    }
+  },
+  "predict_valid": {
+    "status": 200,
+    "elapsed_ms": 145.6,
+    "body": {
+      "is_anomaly": true,
+      "anomaly_score": 0.5027574064848384,
+      "threshold": 0.47696847060668035,
+      "model_version": "robot-ad-1.0.0-iforest-full_18",
+      "schema_version": "robot-cycle-v1",
+      "n_points": 1096,
+      "reference_deviations": [
+        {
+          "channel": "motor_iq_4",
+          "max_abs_z": 3.851,
+          "feature": "motor_iq_4__std"
+        },
+        {
+          "channel": "motor_iq_5",
+          "max_abs_z": 3.272,
+          "feature": "motor_iq_5__std"
+        },
+        {
+          "channel": "joint_velocity_4",
+          "max_abs_z": 3.264,
+          "feature": "joint_velocity_4__min"
+        }
+      ],
+      "reference_deviations_note": "Standardized deviation of channel statistics from fit_normal; an inspection hint, not an explanation of the Isolation Forest score.",
+      "timing_ms": {
+        "features": 1.333,
+        "score": 10.901
+      }
+    }
+  },
+  "predict_invalid": {
+    "status": 422,
+    "body": {
+      "error": {
+        "code": "missing_channel",
+        "message": "missing channels: ['motor_iq_3']"
+      }
+    }
+  },
+  "streamlit_health": 200,
+  "api_log_tail": [
+    "2026-11-10 01:29:37,926 INFO robot_ad.api bundle loaded model_version=robot-ad-1.0.0-iforest-full_18",
+    "INFO:     Application startup complete.",
+    "INFO:     Uvicorn running on http://127.0.0.1:64923 (Press CTRL+C to quit)",
+    "INFO:     127.0.0.1:64925 - \"GET /health HTTP/1.1\" 200 OK",
+    "2026-11-10 01:29:38,597 INFO robot_ad.api predict ok model_version=robot-ad-1.0.0-iforest-full_18 n_points=1096 score=0.502757 is_anomaly=True elapsed_ms=12.33",
+    "INFO:     127.0.0.1:64932 - \"POST /predict HTTP/1.1\" 200 OK",
+    "2026-11-10 01:29:38,733 INFO robot_ad.api predict rejected code=missing_channel elapsed_ms=0.03",
+    "INFO:     127.0.0.1:64933 - \"POST /predict HTTP/1.1\" 422 Unprocessable Entity"
+  ]
+}
