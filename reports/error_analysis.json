@@ -1,0 +1,431 @@
+{
+  "model_version": "robot-ad-1.0.0-iforest-full_18",
+  "threshold": 0.47696847060668035,
+  "cases": [
+    {
+      "sample": 1840,
+      "kind": "false_alarm",
+      "true_label": "normal",
+      "category": "NORMAL_OPERATION",
+      "setting": "PRE_B",
+      "n_points": 1055,
+      "score": 0.5854277749130345,
+      "threshold": 0.47696847060668035,
+      "predicted": "anomaly",
+      "other_model_scores_vs_threshold": {
+        "zscore_max": {
+          "score": 8.397490243403302,
+          "threshold": 4.048549117775254,
+          "alarm": true
+        },
+        "pca_recon": {
+          "score": 0.1786908994086539,
+          "threshold": 0.1040134020643548,
+          "alarm": true
+        }
+      },
+      "top_deviating_channels": [
+        {
+          "channel": "joint_velocity_2",
+          "max_abs_z": 8.397,
+          "feature": "joint_velocity_2__mean"
+        },
+        {
+          "channel": "joint_velocity_4",
+          "max_abs_z": 8.248,
+          "feature": "joint_velocity_4__mean"
+        },
+        {
+          "channel": "joint_velocity_3",
+          "max_abs_z": 7.875,
+          "feature": "joint_velocity_3__mean"
+        }
+      ]
+    },
+    {
+      "sample": 2066,
+      "kind": "false_alarm",
+      "true_label": "normal",
+      "category": "NORMAL_OPERATION",
+      "setting": "BETWEEN_B",
+      "n_points": 1137,
+      "score": 0.562354721381425,
+      "threshold": 0.47696847060668035,
+      "predicted": "anomaly",
+      "other_model_scores_vs_threshold": {
+        "zscore_max": {
+          "score": 5.124138778112134,
+          "threshold": 4.048549117775254,
+          "alarm": true
+        },
+        "pca_recon": {
+          "score": 0.1095282062633631,
+          "threshold": 0.1040134020643548,
+          "alarm": true
+        }
+      },
+      "top_deviating_channels": [
+        {
+          "channel": "motor_iq_1",
+          "max_abs_z": 5.124,
+          "feature": "motor_iq_1__min"
+        },
+        {
+          "channel": "torque_sensor_a_4",
+          "max_abs_z": 4.428,
+          "feature": "torque_sensor_a_4__rms"
+        },
+        {
+          "channel": "motor_iq_4",
+          "max_abs_z": 4.227,
+          "feature": "motor_iq_4__q95_abs"
+        }
+      ]
+    },
+    {
+      "sample": 1962,
+      "kind": "false_alarm",
+      "true_label": "normal",
+      "category": "NORMAL_OPERATION",
+      "setting": "PRE_B",
+      "n_points": 1123,
+      "score": 0.5531384013674173,
+      "threshold": 0.47696847060668035,
+      "predicted": "anomaly",
+      "other_model_scores_vs_threshold": {
+        "zscore_max": {
+          "score": 4.417262505815196,
+          "threshold": 4.048549117775254,
+          "alarm": true
+        },
+        "pca_recon": {
+          "score": 0.10880802995359,
+          "threshold": 0.1040134020643548,
+          "alarm": true
+        }
+      },
+      "top_deviating_channels": [
+        {
+          "channel": "joint_velocity_3",
+          "max_abs_z": 4.417,
+          "feature": "joint_velocity_3__mean"
+        },
+        {
+          "channel": "joint_velocity_4",
+          "max_abs_z": 4.311,
+          "feature": "joint_velocity_4__mean"
+        },
+        {
+          "channel": "motor_iq_4",
+          "max_abs_z": 4.267,
+          "feature": "motor_iq_4__std"
+        }
+      ]
+    },
+    {
+      "sample": 412,
+      "kind": "missed_anomaly",
+      "true_label": "anomaly",
+      "category": "COLLISION_CABLE",
+      "setting": "anomaly setting",
+      "n_points": 1068,
+      "score": 0.4211184615660457,
+      "threshold": 0.47696847060668035,
+      "predicted": "normal",
+      "other_model_scores_vs_threshold": {
+        "zscore_max": {
+          "score": 2.0009949350514384,
+          "threshold": 4.048549117775254,
+          "alarm": false
+        },
+        "pca_recon": {
+          "score": 0.092424176617832,
+          "threshold": 0.1040134020643548,
+          "alarm": false
+        }
+      },
+      "top_deviating_channels": [
+        {
+          "channel": "torque_sensor_a_6",
+          "max_abs_z": 2.001,
+          "feature": "torque_sensor_a_6__max"
+        },
+        {
+          "channel": "motor_iq_1",
+          "max_abs_z": 1.781,
+          "feature": "motor_iq_1__q95_abs"
+        },
+        {
+          "channel": "torque_sensor_a_1",
+          "max_abs_z": 1.71,
+          "feature": "torque_sensor_a_1__min"
+        }
+      ]
+    },
+    {
+      "sample": 409,
+      "kind": "missed_anomaly",
+      "true_label": "anomaly",
+      "category": "COLLISION_CABLE",
+      "setting": "anomaly setting",
+      "n_points": 1083,
+      "score": 0.4251838100553758,
+      "threshold": 0.47696847060668035,
+      "predicted": "normal",
+      "other_model_scores_vs_threshold": {
+        "zscore_max": {
+          "score": 2.8207085641180387,
+          "threshold": 4.048549117775254,
+          "alarm": false
+        },
+        "pca_recon": {
+          "score": 0.0799945199099525,
+          "threshold": 0.1040134020643548,
+          "alarm": false
+        }
+      },
+      "top_deviating_channels": [
+        {
+          "channel": "motor_iq_1",
+          "max_abs_z": 2.821,
+          "feature": "motor_iq_1__q95_abs"
+        },
+        {
+          "channel": "joint_velocity_5",
+          "max_abs_z": 2.545,
+          "feature": "joint_velocity_5__mean"
+        },
+        {
+          "channel": "torque_sensor_a_6",
+          "max_abs_z": 2.418,
+          "feature": "torque_sensor_a_6__q95_abs"
+        }
+      ]
+    },
+    {
+      "sample": 574,
+      "kind": "missed_anomaly",
+      "true_label": "anomaly",
+      "category": "CAN_WEIGHT",
+      "setting": "anomaly setting",
+      "n_points": 1096,
+      "score": 0.4264694925629451,
+      "threshold": 0.47696847060668035,
+      "predicted": "normal",
+      "other_model_scores_vs_threshold": {
+        "zscore_max": {
+          "score": 6.511555380801229,
+          "threshold": 4.048549117775254,
+          "alarm": true
+        },
+        "pca_recon": {
+          "score": 0.2100172387231511,
+          "threshold": 0.1040134020643548,
+          "alarm": true
+        }
+      },
+      "top_deviating_channels": [
+        {
+          "channel": "torque_sensor_a_5",
+          "max_abs_z": 6.512,
+          "feature": "torque_sensor_a_5__rms"
+        },
+        {
+          "channel": "motor_iq_5",
+          "max_abs_z": 3.025,
+          "feature": "motor_iq_5__q95_abs"
+        },
+        {
+          "channel": "torque_sensor_a_6",
+          "max_abs_z": 2.605,
+          "feature": "torque_sensor_a_6__mean"
+        }
+      ]
+    },
+    {
+      "sample": 382,
+      "kind": "borderline",
+      "true_label": "anomaly",
+      "category": "COLLISION_CABLE",
+      "setting": "anomaly setting",
+      "n_points": 1123,
+      "score": 0.4770094353030375,
+      "threshold": 0.47696847060668035,
+      "predicted": "anomaly",
+      "other_model_scores_vs_threshold": {
+        "zscore_max": {
+          "score": 13.413497379331853,
+          "threshold": 4.048549117775254,
+          "alarm": true
+        },
+        "pca_recon": {
+          "score": 0.2976513965557816,
+          "threshold": 0.1040134020643548,
+          "alarm": true
+        }
+      },
+      "top_deviating_channels": [
+        {
+          "channel": "torque_sensor_a_5",
+          "max_abs_z": 13.413,
+          "feature": "torque_sensor_a_5__max"
+        },
+        {
+          "channel": "torque_sensor_a_1",
+          "max_abs_z": 3.037,
+          "feature": "torque_sensor_a_1__max"
+        },
+        {
+          "channel": "torque_sensor_a_4",
+          "max_abs_z": 2.82,
+          "feature": "torque_sensor_a_4__mean"
+        }
+      ]
+    },
+    {
+      "sample": 2018,
+      "kind": "borderline",
+      "true_label": "normal",
+      "category": "NORMAL_OPERATION",
+      "setting": "PRE_B",
+      "n_points": 1055,
+      "score": 0.4770557242915519,
+      "threshold": 0.47696847060668035,
+      "predicted": "anomaly",
+      "other_model_scores_vs_threshold": {
+        "zscore_max": {
+          "score": 3.0366647740369586,
+          "threshold": 4.048549117775254,
+          "alarm": false
+        },
+        "pca_recon": {
+          "score": 0.1138746405966274,
+          "threshold": 0.1040134020643548,
+          "alarm": true
+        }
+      },
+      "top_deviating_channels": [
+        {
+          "channel": "torque_sensor_a_4",
+          "max_abs_z": 3.037,
+          "feature": "torque_sensor_a_4__rms"
+        },
+        {
+          "channel": "motor_iq_6",
+          "max_abs_z": 2.599,
+          "feature": "motor_iq_6__max"
+        },
+        {
+          "channel": "joint_velocity_6",
+          "max_abs_z": 2.427,
+          "feature": "joint_velocity_6__q95_abs"
+        }
+      ]
+    }
+  ],
+  "normal_drift_vs_fit_normal": [
+    {
+      "group": "fit_normal",
+      "n": 570,
+      "median_abs_z_current": 0.6903222382278144,
+      "median_abs_z_velocity": 0.6259987591887174,
+      "median_abs_z_torque": 0.6826060419606768,
+      "median_n_points": 1083.0
+    },
+    {
+      "group": "dev_normal",
+      "n": 188,
+      "median_abs_z_current": 0.6875112374607972,
+      "median_abs_z_velocity": 0.6010429211180854,
+      "median_abs_z_torque": 0.6695703132543229,
+      "median_n_points": 1083.0
+    },
+    {
+      "group": "cal_normal",
+      "n": 190,
+      "median_abs_z_current": 0.6895907069072535,
+      "median_abs_z_velocity": 0.6405871813795694,
+      "median_abs_z_torque": 0.6780876632963462,
+      "median_n_points": 1083.0
+    },
+    {
+      "group": "PRE_B",
+      "n": 319,
+      "median_abs_z_current": 0.969027384165384,
+      "median_abs_z_velocity": 0.6839703657490994,
+      "median_abs_z_torque": 0.790608484661792,
+      "median_n_points": 1082.0,
+      "primary_fpr": 0.3761755485893417
+    },
+    {
+      "group": "BETWEEN_A",
+      "n": 37,
+      "median_abs_z_current": 1.0169196935277596,
+      "median_abs_z_velocity": 0.635115202822941,
+      "median_abs_z_torque": 0.7488207243608986,
+      "median_n_points": 1096.0,
+      "primary_fpr": 0.2972972972972973
+    },
+    {
+      "group": "BETWEEN_B",
+      "n": 44,
+      "median_abs_z_current": 1.5050904951754853,
+      "median_abs_z_velocity": 0.6072779169452711,
+      "median_abs_z_torque": 0.8846665435057086,
+      "median_n_points": 1096.0,
+      "primary_fpr": 0.9772727272727273
+    },
+    {
+      "group": "BETWEEN_C",
+      "n": 19,
+      "median_abs_z_current": 0.8028472118714247,
+      "median_abs_z_velocity": 0.6787534391605684,
+      "median_abs_z_torque": 0.9384303860960778,
+      "median_n_points": 1096.0,
+      "primary_fpr": 0.21052631578947367
+    }
+  ],
+  "between_b_most_shifted_features": [
+    {
+      "feature": "torque_sensor_a_4__rms",
+      "mean_z": 3.9
+    },
+    {
+      "feature": "motor_iq_1__q95_abs",
+      "mean_z": 3.85
+    },
+    {
+      "feature": "torque_sensor_a_4__mean",
+      "mean_z": -3.7
+    },
+    {
+      "feature": "motor_iq_1__rms",
+      "mean_z": 3.35
+    },
+    {
+      "feature": "motor_iq_6__q95_abs",
+      "mean_z": 3.24
+    },
+    {
+      "feature": "motor_iq_1__std",
+      "mean_z": 3.16
+    },
+    {
+      "feature": "motor_iq_4__q95_abs",
+      "mean_z": 3.09
+    },
+    {
+      "feature": "motor_iq_4__std",
+      "mean_z": 3.0
+    },
+    {
+      "feature": "motor_iq_6__rms",
+      "mean_z": 2.84
+    },
+    {
+      "feature": "motor_iq_6__std",
+      "mean_z": 2.79
+    }
+  ],
+  "note": "Analysis after the frozen test run. Nothing here changes the v1 models or thresholds."
+}
