@@ -16,3 +16,7 @@ streamlit==1.67.0
 pytest==9.2.0
 httpx==0.28.1
 ruff==0.17.4
+
+# Optional, only for the sequence-autoencoder search rounds (scripts/10_v11_search.py --round 3/5).
+# Tested: torch 2.11.0+cu128, trained on CPU (see docs/technical_report_v1_1.md).
+#   pip install torch==2.11.0 --index-url https://download.pytorch.org/whl/cu128

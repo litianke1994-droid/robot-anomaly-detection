@@ -15,6 +15,7 @@ pipeline = ["pandas", "pyarrow", "matplotlib"]
 serve = ["fastapi", "pydantic", "uvicorn"]
 app = ["streamlit", "matplotlib", "pandas", "pyarrow"]
 dev = ["pytest", "httpx", "ruff"]
+sequence = ["torch"]
 
 [project.scripts]
 robot-ad = "robot_ad.cli:main"
