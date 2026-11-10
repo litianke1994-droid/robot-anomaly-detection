@@ -1,0 +1,824 @@
+{
+  "created_utc": "2026-11-10T01:07:25+00:00",
+  "evaluation_git_commit": "acc5fc7061f4579e6b73c7c238f9f7f2d190c716",
+  "label": "EXPLORATORY: holdout is half of the v1 test part, whose aggregate metrics were seen in v1",
+  "holdout_counts": {
+    "n": 580,
+    "n_anomaly": 369,
+    "n_normal": 211,
+    "anomaly_rate": 0.6362068965517241
+  },
+  "thresholds": {
+    "v1_1_levels": {
+      "warning": 1.382454137456422,
+      "alarm": 1.9169060098514583
+    },
+    "v1_iforest": 0.47696847060668035,
+    "v1_zscore": 4.048549117775254,
+    "v1_pca": 0.1040134020643548
+  },
+  "results": {
+    "v1_1": {
+      "model_version": "robot-ad-1.1.0-mahalanobis+lof-n_neighbors10-multi",
+      "operating_point_warning": {
+        "threshold": 1.382454137456422,
+        "confusion": {
+          "TP": 305,
+          "FN": 64,
+          "FP": 20,
+          "TN": 191
+        },
+        "recall": 0.8265582655826558,
+        "fpr": 0.0947867298578199,
+        "precision": 0.9384615384615385,
+        "f1": 0.8789625360230547
+      },
+      "ranking": {
+        "roc_auc": 0.9478672985781991,
+        "average_precision": 0.9701172109539261,
+        "ap_reference_anomaly_rate": 0.6362068965517241,
+        "n": 580,
+        "n_anomaly": 369,
+        "n_normal": 211
+      },
+      "per_category": [
+        {
+          "group": "AXIS_FRICTION",
+          "kind": "anomaly",
+          "n": 74,
+          "TP": 63,
+          "FN": 11,
+          "recall": 0.8513513513513513
+        },
+        {
+          "group": "AXIS_WEIGHT",
+          "kind": "anomaly",
+          "n": 76,
+          "TP": 67,
+          "FN": 9,
+          "recall": 0.881578947368421
+        },
+        {
+          "group": "CAN_WEIGHT",
+          "kind": "anomaly",
+          "n": 40,
+          "TP": 33,
+          "FN": 7,
+          "recall": 0.825
+        },
+        {
+          "group": "COLLISION_CABLE",
+          "kind": "anomaly",
+          "n": 25,
+          "TP": 14,
+          "FN": 11,
+          "recall": 0.56
+        },
+        {
+          "group": "COLLISION_CARTON",
+          "kind": "anomaly",
+          "n": 12,
+          "TP": 7,
+          "FN": 5,
+          "recall": 0.5833333333333334
+        },
+        {
+          "group": "COLLISION_FOAM",
+          "kind": "anomaly",
+          "n": 35,
+          "TP": 22,
+          "FN": 13,
+          "recall": 0.6285714285714286
+        },
+        {
+          "group": "ENTANGLED",
+          "kind": "anomaly",
+          "n": 5,
+          "TP": 5,
+          "FN": 0,
+          "recall": 1.0
+        },
+        {
+          "group": "INVALID_POSITION",
+          "kind": "anomaly",
+          "n": 5,
+          "TP": 5,
+          "FN": 0,
+          "recall": 1.0
+        },
+        {
+          "group": "LOSE_CAN",
+          "kind": "anomaly",
+          "n": 35,
+          "TP": 33,
+          "FN": 2,
+          "recall": 0.9428571428571428
+        },
+        {
+          "group": "MISS_CAN",
+          "kind": "anomaly",
+          "n": 1,
+          "TP": 1,
+          "FN": 0,
+          "recall": 1.0
+        },
+        {
+          "group": "MOTOR_COMMUTATION",
+          "kind": "anomaly",
+          "n": 44,
+          "TP": 44,
+          "FN": 0,
+          "recall": 1.0
+        },
+        {
+          "group": "WOBBLING_STATION",
+          "kind": "anomaly",
+          "n": 17,
+          "TP": 11,
+          "FN": 6,
+          "recall": 0.6470588235294118
+        }
+      ],
+      "per_normal_setting": [
+        {
+          "group": "BETWEEN_A",
+          "kind": "normal",
+          "n": 17,
+          "FP": 2,
+          "TN": 15,
+          "fpr": 0.11764705882352941
+        },
+        {
+          "group": "BETWEEN_B",
+          "kind": "normal",
+          "n": 25,
+          "FP": 14,
+          "TN": 11,
+          "fpr": 0.56
+        },
+        {
+          "group": "BETWEEN_C",
+          "kind": "normal",
+          "n": 9,
+          "FP": 2,
+          "TN": 7,
+          "fpr": 0.2222222222222222
+        },
+        {
+          "group": "PRE_B",
+          "kind": "normal",
+          "n": 160,
+          "FP": 2,
+          "TN": 158,
+          "fpr": 0.0125
+        }
+      ],
+      "operating_point_alarm": {
+        "threshold": 1.9169060098514583,
+        "confusion": {
+          "TP": 260,
+          "FN": 109,
+          "FP": 9,
+          "TN": 202
+        },
+        "recall": 0.7046070460704607,
+        "fpr": 0.04265402843601896,
+        "precision": 0.966542750929368,
+        "f1": 0.8150470219435736
+      },
+      "per_normal_setting_alarm": [
+        {
+          "group": "BETWEEN_A",
+          "kind": "normal",
+          "n": 17,
+          "FP": 0,
+          "TN": 17,
+          "fpr": 0.0
+        },
+        {
+          "group": "BETWEEN_B",
+          "kind": "normal",
+          "n": 25,
+          "FP": 8,
+          "TN": 17,
+          "fpr": 0.32
+        },
+        {
+          "group": "BETWEEN_C",
+          "kind": "normal",
+          "n": 9,
+          "FP": 0,
+          "TN": 9,
+          "fpr": 0.0
+        },
+        {
+          "group": "PRE_B",
+          "kind": "normal",
+          "n": 160,
+          "FP": 1,
+          "TN": 159,
+          "fpr": 0.00625
+        }
+      ]
+    },
+    "v1_iforest": {
+      "model_version": "robot-ad-1.0.0-iforest-full_18",
+      "operating_point_warning": {
+        "threshold": 0.47696847060668035,
+        "confusion": {
+          "TP": 280,
+          "FN": 89,
+          "FP": 96,
+          "TN": 115
+        },
+        "recall": 0.7588075880758808,
+        "fpr": 0.4549763033175355,
+        "precision": 0.7446808510638298,
+        "f1": 0.7516778523489933
+      },
+      "ranking": {
+        "roc_auc": 0.7236029232330238,
+        "average_precision": 0.8225847596765238,
+        "ap_reference_anomaly_rate": 0.6362068965517241,
+        "n": 580,
+        "n_anomaly": 369,
+        "n_normal": 211
+      },
+      "per_category": [
+        {
+          "group": "AXIS_FRICTION",
+          "kind": "anomaly",
+          "n": 74,
+          "TP": 61,
+          "FN": 13,
+          "recall": 0.8243243243243243
+        },
+        {
+          "group": "AXIS_WEIGHT",
+          "kind": "anomaly",
+          "n": 76,
+          "TP": 74,
+          "FN": 2,
+          "recall": 0.9736842105263158
+        },
+        {
+          "group": "CAN_WEIGHT",
+          "kind": "anomaly",
+          "n": 40,
+          "TP": 26,
+          "FN": 14,
+          "recall": 0.65
+        },
+        {
+          "group": "COLLISION_CABLE",
+          "kind": "anomaly",
+          "n": 25,
+          "TP": 12,
+          "FN": 13,
+          "recall": 0.48
+        },
+        {
+          "group": "COLLISION_CARTON",
+          "kind": "anomaly",
+          "n": 12,
+          "TP": 8,
+          "FN": 4,
+          "recall": 0.6666666666666666
+        },
+        {
+          "group": "COLLISION_FOAM",
+          "kind": "anomaly",
+          "n": 35,
+          "TP": 23,
+          "FN": 12,
+          "recall": 0.6571428571428571
+        },
+        {
+          "group": "ENTANGLED",
+          "kind": "anomaly",
+          "n": 5,
+          "TP": 5,
+          "FN": 0,
+          "recall": 1.0
+        },
+        {
+          "group": "INVALID_POSITION",
+          "kind": "anomaly",
+          "n": 5,
+          "TP": 4,
+          "FN": 1,
+          "recall": 0.8
+        },
+        {
+          "group": "LOSE_CAN",
+          "kind": "anomaly",
+          "n": 35,
+          "TP": 13,
+          "FN": 22,
+          "recall": 0.37142857142857144
+        },
+        {
+          "group": "MISS_CAN",
+          "kind": "anomaly",
+          "n": 1,
+          "TP": 1,
+          "FN": 0,
+          "recall": 1.0
+        },
+        {
+          "group": "MOTOR_COMMUTATION",
+          "kind": "anomaly",
+          "n": 44,
+          "TP": 44,
+          "FN": 0,
+          "recall": 1.0
+        },
+        {
+          "group": "WOBBLING_STATION",
+          "kind": "anomaly",
+          "n": 17,
+          "TP": 9,
+          "FN": 8,
+          "recall": 0.5294117647058824
+        }
+      ],
+      "per_normal_setting": [
+        {
+          "group": "BETWEEN_A",
+          "kind": "normal",
+          "n": 17,
+          "FP": 5,
+          "TN": 12,
+          "fpr": 0.29411764705882354
+        },
+        {
+          "group": "BETWEEN_B",
+          "kind": "normal",
+          "n": 25,
+          "FP": 24,
+          "TN": 1,
+          "fpr": 0.96
+        },
+        {
+          "group": "BETWEEN_C",
+          "kind": "normal",
+          "n": 9,
+          "FP": 3,
+          "TN": 6,
+          "fpr": 0.3333333333333333
+        },
+        {
+          "group": "PRE_B",
+          "kind": "normal",
+          "n": 160,
+          "FP": 64,
+          "TN": 96,
+          "fpr": 0.4
+        }
+      ]
+    },
+    "v1_zscore": {
+      "model_version": "robot-ad-1.0.0-zscore_max-full_18",
+      "operating_point_warning": {
+        "threshold": 4.048549117775254,
+        "confusion": {
+          "TP": 277,
+          "FN": 92,
+          "FP": 59,
+          "TN": 152
+        },
+        "recall": 0.7506775067750677,
+        "fpr": 0.2796208530805687,
+        "precision": 0.8244047619047619,
+        "f1": 0.7858156028368795
+      },
+      "ranking": {
+        "roc_auc": 0.8254793922346807,
+        "average_precision": 0.9098672186627732,
+        "ap_reference_anomaly_rate": 0.6362068965517241,
+        "n": 580,
+        "n_anomaly": 369,
+        "n_normal": 211
+      },
+      "per_category": [
+        {
+          "group": "AXIS_FRICTION",
+          "kind": "anomaly",
+          "n": 74,
+          "TP": 53,
+          "FN": 21,
+          "recall": 0.7162162162162162
+        },
+        {
+          "group": "AXIS_WEIGHT",
+          "kind": "anomaly",
+          "n": 76,
+          "TP": 67,
+          "FN": 9,
+          "recall": 0.881578947368421
+        },
+        {
+          "group": "CAN_WEIGHT",
+          "kind": "anomaly",
+          "n": 40,
+          "TP": 32,
+          "FN": 8,
+          "recall": 0.8
+        },
+        {
+          "group": "COLLISION_CABLE",
+          "kind": "anomaly",
+          "n": 25,
+          "TP": 11,
+          "FN": 14,
+          "recall": 0.44
+        },
+        {
+          "group": "COLLISION_CARTON",
+          "kind": "anomaly",
+          "n": 12,
+          "TP": 4,
+          "FN": 8,
+          "recall": 0.3333333333333333
+        },
+        {
+          "group": "COLLISION_FOAM",
+          "kind": "anomaly",
+          "n": 35,
+          "TP": 27,
+          "FN": 8,
+          "recall": 0.7714285714285715
+        },
+        {
+          "group": "ENTANGLED",
+          "kind": "anomaly",
+          "n": 5,
+          "TP": 5,
+          "FN": 0,
+          "recall": 1.0
+        },
+        {
+          "group": "INVALID_POSITION",
+          "kind": "anomaly",
+          "n": 5,
+          "TP": 2,
+          "FN": 3,
+          "recall": 0.4
+        },
+        {
+          "group": "LOSE_CAN",
+          "kind": "anomaly",
+          "n": 35,
+          "TP": 23,
+          "FN": 12,
+          "recall": 0.6571428571428571
+        },
+        {
+          "group": "MISS_CAN",
+          "kind": "anomaly",
+          "n": 1,
+          "TP": 1,
+          "FN": 0,
+          "recall": 1.0
+        },
+        {
+          "group": "MOTOR_COMMUTATION",
+          "kind": "anomaly",
+          "n": 44,
+          "TP": 44,
+          "FN": 0,
+          "recall": 1.0
+        },
+        {
+          "group": "WOBBLING_STATION",
+          "kind": "anomaly",
+          "n": 17,
+          "TP": 8,
+          "FN": 9,
+          "recall": 0.47058823529411764
+        }
+      ],
+      "per_normal_setting": [
+        {
+          "group": "BETWEEN_A",
+          "kind": "normal",
+          "n": 17,
+          "FP": 3,
+          "TN": 14,
+          "fpr": 0.17647058823529413
+        },
+        {
+          "group": "BETWEEN_B",
+          "kind": "normal",
+          "n": 25,
+          "FP": 20,
+          "TN": 5,
+          "fpr": 0.8
+        },
+        {
+          "group": "BETWEEN_C",
+          "kind": "normal",
+          "n": 9,
+          "FP": 3,
+          "TN": 6,
+          "fpr": 0.3333333333333333
+        },
+        {
+          "group": "PRE_B",
+          "kind": "normal",
+          "n": 160,
+          "FP": 33,
+          "TN": 127,
+          "fpr": 0.20625
+        }
+      ]
+    },
+    "v1_pca": {
+      "model_version": "robot-ad-1.0.0-pca_recon-full_18",
+      "operating_point_warning": {
+        "threshold": 0.1040134020643548,
+        "confusion": {
+          "TP": 309,
+          "FN": 60,
+          "FP": 61,
+          "TN": 150
+        },
+        "recall": 0.8373983739837398,
+        "fpr": 0.2890995260663507,
+        "precision": 0.8351351351351352,
+        "f1": 0.8362652232746955
+      },
+      "ranking": {
+        "roc_auc": 0.8761093772075162,
+        "average_precision": 0.9363064588947139,
+        "ap_reference_anomaly_rate": 0.6362068965517241,
+        "n": 580,
+        "n_anomaly": 369,
+        "n_normal": 211
+      },
+      "per_category": [
+        {
+          "group": "AXIS_FRICTION",
+          "kind": "anomaly",
+          "n": 74,
+          "TP": 70,
+          "FN": 4,
+          "recall": 0.9459459459459459
+        },
+        {
+          "group": "AXIS_WEIGHT",
+          "kind": "anomaly",
+          "n": 76,
+          "TP": 61,
+          "FN": 15,
+          "recall": 0.8026315789473685
+        },
+        {
+          "group": "CAN_WEIGHT",
+          "kind": "anomaly",
+          "n": 40,
+          "TP": 37,
+          "FN": 3,
+          "recall": 0.925
+        },
+        {
+          "group": "COLLISION_CABLE",
+          "kind": "anomaly",
+          "n": 25,
+          "TP": 16,
+          "FN": 9,
+          "recall": 0.64
+        },
+        {
+          "group": "COLLISION_CARTON",
+          "kind": "anomaly",
+          "n": 12,
+          "TP": 7,
+          "FN": 5,
+          "recall": 0.5833333333333334
+        },
+        {
+          "group": "COLLISION_FOAM",
+          "kind": "anomaly",
+          "n": 35,
+          "TP": 25,
+          "FN": 10,
+          "recall": 0.7142857142857143
+        },
+        {
+          "group": "ENTANGLED",
+          "kind": "anomaly",
+          "n": 5,
+          "TP": 5,
+          "FN": 0,
+          "recall": 1.0
+        },
+        {
+          "group": "INVALID_POSITION",
+          "kind": "anomaly",
+          "n": 5,
+          "TP": 5,
+          "FN": 0,
+          "recall": 1.0
+        },
+        {
+          "group": "LOSE_CAN",
+          "kind": "anomaly",
+          "n": 35,
+          "TP": 30,
+          "FN": 5,
+          "recall": 0.8571428571428571
+        },
+        {
+          "group": "MISS_CAN",
+          "kind": "anomaly",
+          "n": 1,
+          "TP": 1,
+          "FN": 0,
+          "recall": 1.0
+        },
+        {
+          "group": "MOTOR_COMMUTATION",
+          "kind": "anomaly",
+          "n": 44,
+          "TP": 44,
+          "FN": 0,
+          "recall": 1.0
+        },
+        {
+          "group": "WOBBLING_STATION",
+          "kind": "anomaly",
+          "n": 17,
+          "TP": 8,
+          "FN": 9,
+          "recall": 0.47058823529411764
+        }
+      ],
+      "per_normal_setting": [
+        {
+          "group": "BETWEEN_A",
+          "kind": "normal",
+          "n": 17,
+          "FP": 8,
+          "TN": 9,
+          "fpr": 0.47058823529411764
+        },
+        {
+          "group": "BETWEEN_B",
+          "kind": "normal",
+          "n": 25,
+          "FP": 15,
+          "TN": 10,
+          "fpr": 0.6
+        },
+        {
+          "group": "BETWEEN_C",
+          "kind": "normal",
+          "n": 9,
+          "FP": 1,
+          "TN": 8,
+          "fpr": 0.1111111111111111
+        },
+        {
+          "group": "PRE_B",
+          "kind": "normal",
+          "n": 160,
+          "FP": 37,
+          "TN": 123,
+          "fpr": 0.23125
+        }
+      ]
+    }
+  },
+  "bootstrap_95ci": {
+    "v1_1": {
+      "recall": [
+        0.7859078590785907,
+        0.8617886178861789
+      ],
+      "fpr": [
+        0.05687203791469194,
+        0.13744075829383887
+      ],
+      "auc": [
+        0.9302068482770136,
+        0.9630129464801758
+      ],
+      "ap": [
+        0.959726933162972,
+        0.9791574302705882
+      ]
+    },
+    "v1_iforest": {
+      "recall": [
+        0.7127371273712737,
+        0.8021680216802168
+      ],
+      "fpr": [
+        0.3886255924170616,
+        0.5213270142180095
+      ],
+      "auc": [
+        0.6816148422147728,
+        0.7646774939313374
+      ],
+      "ap": [
+        0.7900739087855527,
+        0.8546262976652547
+      ]
+    },
+    "v1_zscore": {
+      "recall": [
+        0.7046070460704607,
+        0.7913279132791328
+      ],
+      "fpr": [
+        0.21800947867298578,
+        0.3412322274881517
+      ],
+      "auc": [
+        0.7915298809386199,
+        0.8559334823206052
+      ],
+      "ap": [
+        0.8918792070687674,
+        0.9258832219893801
+      ]
+    },
+    "v1_pca": {
+      "recall": [
+        0.7994579945799458,
+        0.8726287262872628
+      ],
+      "fpr": [
+        0.22748815165876776,
+        0.35071090047393366
+      ],
+      "auc": [
+        0.8478258775478751,
+        0.9012445574692713
+      ],
+      "ap": [
+        0.9216075583198398,
+        0.9495446908076194
+      ]
+    },
+    "paired_difference_v1_1_minus": {
+      "v1_iforest": {
+        "recall": [
+          0.02168021680216803,
+          0.11653116531165308
+        ],
+        "fpr": [
+          -0.4265402843601896,
+          -0.29383886255924174
+        ],
+        "auc": [
+          0.18906998548658474,
+          0.2594083535622086
+        ],
+        "ap": [
+          0.1207619184682418,
+          0.17423975268670933
+        ]
+      },
+      "v1_zscore": {
+        "recall": [
+          0.035230352303523005,
+          0.1192411924119241
+        ],
+        "fpr": [
+          -0.24170616113744076,
+          -0.1279620853080569
+        ],
+        "auc": [
+          0.09786890404449076,
+          0.14923162383282618
+        ],
+        "ap": [
+          0.04706562196428441,
+          0.0747559665459825
+        ]
+      },
+      "v1_pca": {
+        "recall": [
+          -0.04878048780487809,
+          0.024390243902439046
+        ],
+        "fpr": [
+          -0.2606635071090047,
+          -0.13270142180094785
+        ],
+        "auc": [
+          0.0474880874401161,
+          0.09721676363683059
+        ],
+        "ap": [
+          0.02050631502254078,
+          0.04697989940823891
+        ]
+      }
+    }
+  },
+  "n_bootstrap": 2000
+}
